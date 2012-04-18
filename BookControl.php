@@ -61,6 +61,7 @@ class BookControl {
             $book->setPCount($book_info['pcount']);
             $book->setDescription($book_info['desc']);
             $book->setQuantity($book_info['quantity']);
+            $book->getPublisher()->setPublishDate($book_info['pdate']);
             //how are we handling multiple authors and publishers?
             $sql_books->updateBook($book);
             return 1;

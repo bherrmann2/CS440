@@ -24,7 +24,7 @@ class Book {
     protected $description;
     protected $quantitiy;
     
-    function __construct() {
+    public function __construct() {
         $this->authors = new Author();
         $this->publishers = new Publisher();
     }

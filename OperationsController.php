@@ -106,7 +106,7 @@ class OperationsController {
         $user_actions = new UserActions();
         $users;
         $users = $user_actions->getCheckoutOutUsers();
-        foreach($user as $users){
+        foreach($users as $user){
             $to = $user->getUserName();
             $subject = "Book Reminder";
             $message = "This is an email to remind you that you have a book checked out.";
