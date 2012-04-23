@@ -24,12 +24,15 @@ class Book {
 	protected $page_count;
 	protected $description;
 	protected $quantitiy;
+	protected $available;
 
 	public function __construct() {
 		$this->authors = new Author();
 		$this->publishers = new Publisher();
 	}
-
+	public function getNumAvailable(){
+		return $this->available;
+	}
 	public function getVolumeID() {
 		return $this->volume_id;
 	}
@@ -90,6 +93,10 @@ class Book {
 		$this->volume_id = $pVolID;
 		return 1;
 	}    
+	public function setNumAvailable($pNA){
+		$this->available = $pNA;
+		return 1;
+	}
 }
 
 ?>
