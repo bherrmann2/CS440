@@ -20,6 +20,7 @@ class Book {
     protected $publishers;
     protected $name;
     protected $isbn;
+    protected $volume_id;
     protected $page_count;
     protected $description;
     protected $quantitiy;
@@ -28,7 +29,10 @@ class Book {
         $this->authors = new Author();
         $this->publishers = new Publisher();
     }
-    
+
+    public function getVolumeID() {
+	return $this->volume_id;
+    }
     public function getAuthor(){
         return $this->authors;
     }
@@ -82,6 +86,10 @@ class Book {
         return 1;
     }
     
+    public function setVolumeID($pVolID){
+	    $this->volume_id = $pVolID;
+	    return 1;
+    }    
 }
 
 ?>
