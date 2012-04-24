@@ -39,9 +39,10 @@ class MySQLBooks {
                 return 0;
             }
         }else{
-            $query = sprintf("INSERT INTO books (name, isbn, page_count, quantity, publish_date, description) VALUES('%s', %d, %d, 1, '%s', '%s')",
+            $query = sprintf("INSERT INTO books (name, isbn, volume_id,  page_count, quantity, publish_date, description) VALUES('%s', %d, '%s', %d, 1, '%s', '%s')",
                 mysql_real_escape_string($book->getName()),
-                mysql_real_escape_string($book->getISBN()),
+		mysql_real_escape_string($book->getISBN()),
+		mysql_real_escape_string($book->getVolumeID()),
                 mysql_real_escape_string($book->getPCount()),
                 mysql_real_escape_string($book->getPublisher()->getPublishDate()),
                 mysql_real_escape_string($book->getDescription()));
@@ -134,9 +135,10 @@ class MySQLBooks {
         $row = mysql_fetch_array($result);
         $book_key = $row[0];
         
-        $query = sprintf("UPDATE books SET name='%s', isbn=%d, page_count=%d, quantity=%d, publish_date='%s', description='%s' WHERE book_key=%d",
+        $query = sprintf("UPDATE books SET name='%s', isbn=%d, volume_id='%s', page_count=%d, quantity=%d, publish_date='%s', description='%s' WHERE book_key=%d",
             mysql_real_escape_string($book->getName()),
-            mysql_real_escape_string($book->getISBN()),
+	    mysql_real_escape_string($book->getISBN()),
+	    mysql_real_escape_string($book->getVolumeID()),
             mysql_real_escape_string($book->getPCount()),
             mysql_real_escape_string($book->getQuantity()),
             mysql_real_escape_string($book->getPublisher()->getPublishDate()),
@@ -192,8 +194,9 @@ class MySQLBooks {
         
         $book = new Book();
         $book->setDescription($row['description']);
-        $book->setISBN($row['isbn']);
-        $book->setName($row['name']);
+	$book->setISBN($row['isbn']);
+	$book->setVolumeID($row['volume_id']);
+	$book->setName($row['name']);
         $book->setPCount($row['page_count']);
         $book->setQuantity($row['quantity']);
         $book->getPublisher()->setPublishDate($row['publish_date']);
