@@ -1,0 +1,627 @@
+html,body { 
+	font 			: 82%/150% 'Lucida Grande', Helvetica,Tahoma, Arial, clean, sans-serif;
+	height: 100%
+}
+
+#container {
+	width			:	100%;
+	margin 			:	10px auto;
+}
+
+#top {
+	padding 		: 	.5em;
+	margin-bottom	:	1em;
+}
+
+#leftColumn {
+	float 			: 	left;
+	width			: 	15em;
+	margin 			: 	0;
+	font-size		:	123%;
+	padding 		: 	1em;
+	position		:	relative;
+}
+
+#mainContent {
+	border-left		: 	1px solid #ddd;
+	padding 		: 	.5em 1em 1em 1em;
+	width			: 	70%;
+	font-size		:	123%;
+	position		:	relative;
+	float			:	left;
+ }
+ 
+#dashboard_right {
+	position		:	relative;
+	width			:	10%;
+	float			:	left;
+	font-size		:	123%;
+	padding 		: 	1em;
+}
+
+html>body #mainContent {
+	width 			: 	70%;
+}
+
+#footer {
+	clear 			: 	both;
+	margin 			: 	0;
+	padding 		: 	.5em;
+	color 			: 	#333;
+	background-color: 	#ddd; 
+}
+
+h1, h2 { 
+	margin 			: 	0 0 .1em 0; 
+}
+
+h4 {
+	margin 			:	3em 0 0 0;
+}
+
+h1 a, h2 a{
+	text-decoration	: 	none;	
+}
+
+h1 a { 
+	color 			:	#333; 
+}
+
+h2 a { 
+	color 			:	#999;
+}
+
+#leftColumn form {
+	padding 		: 	.1em 0 0 .5em;
+}
+
+#leftColumn a {
+	display 		: 	block;
+	padding 		: 	0 .5em .5em .5em;
+}
+
+#leftColumn p.small a {
+	display 		: 	inline;
+	padding 		: 	0 .2em .2em .2em;
+}
+
+#leftColumn p.small a.alt {
+	font-weight		: 	bold;
+	background-color:  	blue;
+	color 			: 	white;
+}
+
+#mainContent a:link {
+	 margin 		: 	2em 0 2em 0;
+}
+
+#mainContent a:hover, #leftColumn p.small a:hover {
+	background-color:  	blue;
+	color 			: 	white;
+}
+
+#mainContent a:visited:hover {
+	background-color:	purple;
+	color 			:	white;
+}
+
+input {
+	margin-bottom 	: 	5px; 
+}
+
+input.shortest {
+	width			: 	2em;
+}
+
+.shaded {
+	background-color:	#eee;
+	padding 		:	.4em .4em .4em 1em;
+}
+
+input.long {
+	width 			:	25em;
+	margin-bottom	:	10px;
+}
+
+input.netid {
+	width			:	8em;
+}
+
+input.nomargin {
+	margin 			:	0;
+}
+	
+li { 
+	padding 		:	.2em .2em 1em .2em;
+}
+
+label {
+	padding-right 	: 	.5em;
+	display 		: 	block;
+	width 			: 	21em;
+	text-align 		: 	right;
+	float 			: 	left;
+}
+
+label.short {
+	width			:	11em;
+	background-color:	#eee;
+	margin 			: 	.2em 1em 0 0;
+}
+
+textarea {
+	width			:	100%;
+	height 			:	10em; 
+}
+
+textarea.medium {
+	width			:	45em;
+	height 			:	5em; 
+}
+
+textarea.medium-long {
+	width			:	100%;
+	height 			:	5em; 
+}
+
+textarea.long {
+	width 			:	45em;
+	height 			:	10em;
+	margin-bottom 	: 	15px; 
+}
+
+textarea.oldShort {
+	height			:	5em;
+	width			:	20em;
+}
+
+select {
+	width			: 	15em;
+}
+
+select.short {
+	width			: 	9em;
+}
+
+select.shorter, input.medium {
+	width			: 	8em;
+}
+
+select.shortest, input.short {
+	width			: 	5.5em;
+}
+
+select.long {
+	width: 25em;
+}
+
+td.editable, select.shortest, input.shorter {
+	width			: 	4em;
+}
+
+.footnote {
+	display 		: 	block;
+	text-align 		: 	right;
+	color 			: 	#333;
+	margin 			: 	0 0 3em 0;
+	letter-spacing	:	.01em;
+}
+
+.entry {
+	display 		: 	block;
+	padding 		: 	.5em;
+	margin 			: 	.75em 0 1.25em 0;
+	font-size 		:	.90em;
+	background-color:	#eee;
+}
+
+.footnote2 {
+	display 		: 	block;
+	text-align 		: 	right;
+	margin 			: 	.75em 0 1.25em 0;
+	font-size 		:	.90em;
+	background-color:	#eee;
+}
+
+.comment {
+	display 		:	block;
+	padding 		:	.5em;
+	color 			:	#333;
+	margin 			:	0 0 1em 0;
+	letter-spacing	:	.01em;
+	font-size		:	.86em;
+}
+
+.block {
+	display 		:	inline-block;
+	width	 		:	8.5em;
+}
+
+p {
+	color 			:	#333;
+	letter-spacing	:	.01em;
+	line-height		: 	1.4em;	
+}
+
+p.small {
+	font-size		:	.86em;
+	color 			:	#000;
+}
+
+.alert {
+	font-size 		:	.90em; 
+	background 		:	#fc9;
+	border 			:	1px solid #f60;
+	padding 		:	10px 5px 5px 5px;
+	margin-bottom	: 	20px;
+}
+
+div.submit {
+	padding 		: 	2em 2em 2em 16em;
+	display 		: 	block; 
+}
+
+table {
+	width 			: 	100%;
+	border-spacing	: 	2px;
+	margin-bottom	:	15px;
+}	
+
+
+thead th, tfoot th {
+	padding 	 	:	0 1em 0 1em;
+	background-color:	#bbb;
+	color 			:	#fff;
+	font-size		:	.86em;
+	font-weight		:	bold;
+	text-align		:	center;
+}
+
+th.now {
+	background-color:	#ddd;
+	color 			:	#000;
+}
+
+td.now {
+	font-weight		:	bold;
+	background-color:	#ccc;
+}
+
+td.pending {
+	font-weight		:	bold;
+	background-color:	#f93;
+}
+
+td.taken {
+	font-weight		:	normal;
+	background-color:	#9cf;
+}
+
+tfoot td {
+	text-align		: 	right;
+}
+
+.alt {
+	background-color: 	#ededed;
+}
+
+tr.highlight {
+	background-color: 	#fd7;
+}
+
+tr.highlight td {
+	border 			:	1px solid #f90;
+}
+
+tr.highlight-blue {
+	background-color: 	#cfc;
+}
+
+tr.highlight-blue td {
+	border 			:	1px solid #6c6;
+}
+
+tr.highlight-transfer {
+	background-color: 	#D5E5F7;
+}
+
+tr.highlight-transfer td {
+	border 			:	1px solid #237BDE;
+}
+
+table.results tbody tr:hover {
+	background-color: 	#dcdcdc;
+}
+
+table.schedule td a {
+	color 			: 	#000;
+	text-decoration	:	none;
+}
+
+th, td {
+	font-weight 	: 	normal;
+	padding 		: 	.3em .5em .3em .5em;
+	vertical-align	: 	center;
+	font-size 		:	90%;
+}
+
+.ui-datepicker-week-end span {
+	font-size: 84%;
+}
+
+.ui-datepicker-calendar tbody tr td {
+	font-size: 84%;
+}
+
+fieldset {
+	border			: 	1px solid #999;
+	color 			:	#666;
+	margin-bottom	:	2em;
+}
+
+.w70p {
+	width			:	70%;
+}
+
+.var_custom, #newarea {
+	display  		: 	none;
+}
+
+img.framed {
+	border: 1px solid #666;
+	padding: 5px;
+	background: #fff;
+	margin: 5px;
+}
+
+#transferBox 
+{
+	display: none;
+	width: 300px;
+	background-color: #FFDD77;
+	float: right;
+	text-align: left;
+	padding: 8px;
+}
+
+hr {
+	border: 0;
+	color: #9E9E9E;
+	background-color: #9E9E9E;
+	height: 1px;
+	width: 100%;
+	text-align: left;
+	}
+	
+.information {
+	display 		: 	block;
+	padding 		: 	.5em;
+	margin 			: 	.75em 0 1.25em 0;
+	font-size 		:	.90em;
+	background-color	:	#D5E5F7;
+}
+
+.submit_information {
+	width: 25%; 
+	float: right; 
+	right: 0pt; 
+	position: relative; 
+	bottom: 0pt; 
+	margin: 15px; 
+	padding: 10px;
+	background-color: #FFDD77; 
+	height: 100%;
+}
+
+.right-button {
+	float: right;
+	margin: 0.5em;
+}
+
+.right-info {
+	float: right;
+	font-size: 65%;
+}
+
+.line {
+	border-bottom: 1px solid #000;
+}
+
+.node {
+	width: 100%;
+}
+
+#report_information {
+	width: 65%;
+	float: left;
+}
+
+#report_wrapper {
+	width: 100%;
+	display: inline-block;
+}
+
+.column {
+	float: left;
+	width: 12em;
+}
+
+.form {
+	width: 100%;
+}
+
+.text-right {
+	text-align: right;
+}
+
+#ajaxStatus {
+	background-color:blue;
+	top:0;
+	color:#FFFFFF;
+	display:none;
+	font-weight:bold;
+	left:0;
+	padding:0 5px;
+	position:fixed;
+}
+
+.dropdownbox {
+	font-size       :	.90em;
+	background      :	#fc9;
+	border          :	1px solid #f60;
+	padding         :	10px 5px 5px 5px;
+	position	:	absolute;
+	width		:	200px;
+	height		:	300px;
+	margin-bottom   :	20px;
+	display		:	none;
+	z-index		: 	999999;
+}
+
+.menu {
+	width: 200px;
+	height: 300px;
+	position: absolute;
+	z-index: 9999999;
+	border: 1px solid #FF6600;
+	background: none repeat scroll 0 0 #FFCC99;
+	margin-left: 60px;
+	padding: 15px;
+	margin-top: -5px;
+	display: none;
+}
+
+.gallery {
+	width: 300px;
+	height: 250px;
+	text-align:center;
+	position: absolute;
+	z-index: 9999999;
+	border: 1px solid #FF6600;
+	background: none repeat scroll 0 0 #FFCC99;
+	margin-left: 60px;
+	padding: 15px;
+	margin-top: -5px;
+	display: none;
+}
+
+
+#center-message {
+	position: fixed;
+	width: 1000px;
+	height: 500px;
+	border: 1px solid #000;
+	background: none repeat scroll 0 0 #FFF;
+	z-index: 99999;
+	top: 50%;
+	left: 50%;
+	margin-left: -500px;
+	margin-top: -250px;
+	overflow: scroll;
+}
+
+#center-message-menu {
+	z-index: 999999;
+	left: 50%;
+	margin-top: 250px;
+	padding: 5px;
+	position: fixed;
+	top: 50%;
+	background-color: white;
+	height: 30px;
+	width: 990px;
+	text-align: right;
+	border: 1px solid #000;
+	margin-left: -500px;
+}
+
+#center-message-wrapper {
+	display: none;
+}
+
+#schedtools form {
+	display: inline;
+}
+
+.availability-table {
+	background-color: #bbffcc;
+}
+
+.class-table {
+	background-color: #9999ff;
+}
+
+.meeting-table {
+	background-color: #ff6633;
+}
+
+.work-table {
+	background-color: #FFCC33;
+}
+
+.this-hour {
+	border: 1px solid red;
+	font-weight: bold;
+}
+
+.this-row:hover td {
+	border: 1px solid red;
+}
+
+#info {
+	display: none;
+}
+
+.qualified-consultant {
+	background-color: #228B22;
+}
+
+.unqualified-consultant {
+	background-color: #FF4040;
+}
+
+.menutitle {
+	color: black;
+}
+
+#ajax-info {
+	display: none;
+	position: fixed;
+	top: 0;
+	width: 70%;
+}
+
+.align-left {
+	text-align: left;
+}
+
+.posted {
+	background-color:#FF9933;
+	font-weight:bold;
+}
+
+.taken {
+	background-color:#99CCFF;
+	font-weight:normal;
+}
+
+.vacant {
+	background-color: #218110 !important;
+}
+
+.ontigger {
+	color: green;
+}
+
+.hide {
+	display: none;
+}
+
+.bigbox {
+	width: 60px;
+	height: 60px;
+}
+
+.work-preference {
+	background-color: #ffcc33;
+}
