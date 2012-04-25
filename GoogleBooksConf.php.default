@@ -1,17 +1,13 @@
 <?php
-//Define bookshelf params
-define("GB_API_BOOKSHELF_NAME", "foo");
-define("GB_API_BOOKSHELF_UID", "1001");
-
 //OAuth Service account with private key file and password
 define("GB_API_KEY_FILE", "./foobar.p12");
-define("GB_API_SERVICE_ACCOUNT", "foobar@developer.gserviceaccount.com");
+define("GB_API_SERVICE_ACCOUNT", "foo@developer.gserviceaccount.com");
 define("GB_API_KEY_PASSWD", "notasecret");
 //Not sure if usefull
-define("GB_API_PUB_KEY_FP", "apubkeyfingerprint");
+define("GB_API_PUB_KEY_FP", "foobar");
 
 //API key for simple auth
-define("GB_API_BASIC_KEY", "thisisanapikey");
-//UserId, may be used
-define("GB_API_USER_UID", "thisistheuseruid");
+define("GB_API_BASIC_KEY", "foobar");
+
+
 ?>

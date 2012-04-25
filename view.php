@@ -27,16 +27,17 @@ and open the template in the editor.
             if (isset($_POST['submit'])){
                 $isbn = $_POST['isbn'];
                 echo "<h1 align=\"center\">Please Login</h1>";
-                if ($_POST['submit'] == "Remove"){
+                if ($_POST['submit'] == "Remove"){ //show the fields for removal
                     echo <<<_END
                     <form action="view.php" method="POST">
                         <input type="hidden" name=isbn value=$isbn>
                         <input type="hidden" name=type value="Remove">
                         <p align=center>Admin's name<input type="text" name="admin">
                         Password<input type="password" name="pass"></p>
+                        <p align=center><input type="submit" name="rsubmit" value="Submit">
                     </form>
 _END;
-                }else{
+                }else{ //show the fields for checking in/out
                     echo <<<_END
                     <form action="view.php" method="POST">
                         <input type="hidden" name=isbn value=$isbn>
@@ -44,16 +45,24 @@ _END;
                         <p align=center>Admin's name<input type="text" name="admin">
                         Password<input type="password" name="pass"></p>
                         <p align=center>User's name<input type="text" name="user"></p>
+                        <p align=center><input type="submit" name="csubmit" value="Submit">
                     </form>
 _END;
                 }
-            }else{
-                echo "<h1 align=\"center\">View Book</h1>";
-                //require_once 'UserInterface.php';
-                //if (empty($_GET['isbn'])){
-                    //echo "<p align=center>Nothing to display</p>";
-                //}
+            }else{ //display the book
                 //$ui = new UserInterface();
+                echo "<h1 align=\"center\">View Book</h1>";
+                if (isset($_POST['esubmit'])){
+                    //$ui->postData();
+                    $_GET['isbn'] = $_POST['isbn'];
+                    echo "<p align=center>{$_GET['isbn']}  here</p>";
+                }else{
+                    //require_once 'UserInterface.php';
+                    //if (empty($_GET['isbn'])){
+                        //echo "<p align=center>Nothing to display</p>";
+                        //exit();
+                    //}
+                }
                 //$book = $ui->getData();
                 $isbn = "444646744-33"; //$_GET['isbn'];
                 $name = "Test"; //$book->getName();
