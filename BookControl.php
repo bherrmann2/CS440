@@ -11,7 +11,7 @@
  * @author Brad
  */
 require_once 'Book.php';
-//require_once 'GoogleBooks.php';
+require_once 'GoogleBooks.php';
 require_once 'MySQLBooks.php';
 
 class BookControl {
@@ -60,9 +60,15 @@ class BookControl {
             $book->setISBN($book_info['isbn']);
             $book->setPCount($book_info['pcount']);
             $book->setDescription($book_info['desc']);
-            $book->setQuantity($book_info['quantity']);
             $book->getPublisher()->setPublishDate($book_info['pdate']);
-            //how are we handling multiple authors and publishers?
+            for ($i=0;$i<3;$i++){
+                if ($book_info["author$i"] != ""){
+                    $book->getAuthor()->addAuthor($book_info["author$i"]);
+                }
+                if ($book_info["publisher$i"] != ""){
+                    $book->getPublisher()->addPublisher($book_info["publisher$i"]);
+                }
+            }
             $sql_books->updateBook($book);
             return 1;
         }

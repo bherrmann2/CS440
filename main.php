@@ -17,8 +17,9 @@ and open the template in the editor.
             <p align="center">
                 <a href="search.php">Search</a>
                 <a href="add.php">Add Book</a>
-                <a href="browse.php">Browse</a>
+                <a href="renew.php">Renew</a>
                 <a href="out.php">View Checked Out</a>
+                <a href="help.html">Help</a>
             </p>
         </div>
         <div id="mainContent">

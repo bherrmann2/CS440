@@ -16,7 +16,7 @@ and open the template in the editor.
         <?php
             ini_set("error_reporting", E_ALL);
             require_once('UserInterface.php');
-            if (isset($_POST['ksubmit'])){
+            if (isset($_POST['ksubmit']) || isset($_POST['isubmit'])){
                 $ui = new UserInterface();
                 $books = $ui->postData();
                 if (empty($books)){
@@ -32,9 +32,9 @@ and open the template in the editor.
                 }
             }else{
         ?>
-            <form action="view.php" method="POST">
+            <form action="search.php" method="POST">
                 <p align="center">
-                    ISBN:<br><input type="text" name="isbn" style=width:8em;></text>
+                    ISBN:<br><input type="text" name="isbn" style=width:8em;>
                     <br><input type="submit" name="isubmit" value="Enter">
                 </p>
             </form>
