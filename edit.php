@@ -10,6 +10,7 @@ and open the template in the editor.
     </head>
     <body>
         <?php
+        require_once 'UserInterface.php';
         if (empty($_POST['submit'])){
             echo "<p align=center>Nothing to display</p>";
             exit();
@@ -29,10 +30,10 @@ and open the template in the editor.
             <form action="view.php" method="POST">
             <table align=center cellspacing=0 cellpadding=0 border=1 style="border: solid windowtext 1.0pt">
                 <tr>
-                    <td><b>ISBN</td><td><b>Quantity</td><td><b>Availabe</td>
+                    <td><b>ISBN</td><td></td><td></td>
                 </tr>
                     <td><input type="text" name="isbn" value="$isbn"></td>
-                    <td><input type="text" name="" value="$quantity"></td>
+                    <td></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -62,7 +63,7 @@ _END;
             }
         }
         echo "</tr><tr><td><b>Publish Date</td><td></td><td></td></tr><tr><td><input type=\"text\" name=\"pdate\" value=\"$pdate\"></td><td></td><td></td></tr>";
-        echo "<tr><td><b>Description</td><td></td><td></td></tr><tr><td colspan=3><textarea style=\"resize: none;\" cols=50 rows=5>$description</textarea></td></tr>";
+        echo "<tr><td><b>Description</td><td></td><td></td></tr><tr><td colspan=3><textarea name=\"desc\" style=\"resize: none;\" cols=50 rows=5>$description</textarea></td></tr>";
         echo "</table>";
         echo "<p align=center><input type=\"submit\" name=\"esubmit\" value=\"Submit\"></p></form>";
         ?>

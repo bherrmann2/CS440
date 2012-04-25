@@ -22,62 +22,52 @@ class UserInterface {
     //re-write all of this shit to use functions instead. only did it this way
     //due to an oversight on the design doc and didn't want to lose points
     public function postData(){
-        if (isset($_POST['isubmit'])){
-            $isbn = $_POST['isbn'];
-            $books = $this->ops->search($isbn, "", "", "");
-            echo "<html><body><h1 align=center>Results</h1>";
-            foreach($books as $book){
-                
-                echo <<<_END
-                    <p align="center"><a href="view.php?isbn" 
-            
-_END;
+        if (isset($_POST['isubmit'])){ //isbn search DONE
+            if ($_POST['isbn']==""){
+                $isbn=-1;
+            }else{
+                $isbn = $_POST['isbn'];
             }
-        }else if(isset($_POST['ksubmit'])){ //keywords search
+            return $this->ops->search($isbn, "", "", "");
+        }else if(isset($_POST['ksubmit'])){ //keywords search DONE
             $keywords = $_POST['keywords'];
             $author = $_POST['author'];
             $title = $_POST['title'];
             return $this->ops->search("", $author, $title, $keywords);
-        }else if(isset($_POST['asubmit'])){ //add book
+        }else if(isset($_POST['asubmit'])){ //add book DONE
             $username = $_POST['username'];
             $password = $_POST['password'];
             $isbn = $_POST['isbn'];
-            if ($this->ops->addBook($isbn, $username, $password) == 0){
-                //error
-            }
-        }else if(isset($_POST['rsubmit'])){ //remove book
+            return $this->ops->addBook($isbn, $username, $password);
+        }else if(isset($_POST['rsubmit'])){ //remove book DONE
             $admin = $_POST['admin'];
             $pass = $_POST['pass'];
             $isbn = $_POST['isbn'];
-            if ($this->ops->removeBook($isbn, $admin, $pass)==0){
-                return "An error occured";
-            }else{
-                return "Success";
-            }
-        }else if(isset($_POST['csubmit'])){ //checkout/checkin
-            if ($_POST['csubmit'] == "Checkout"){
+            return $this->ops->removeBook($isbn, $admin, $pass);
+        }else if(isset($_POST['csubmit'])){ //checkout/checkin DONE
+            if ($_POST['type'] == "Checkout"){
                 $isbn = $_POST['isbn'];
                 $admin = $_POST['admin'];
                 $pass = $_POST['pass'];
                 $user = $_POST['user'];
-                if ($this->ops->checkoutBook($isbn, $user, $admin, $pass)==0){
-                    return "An error occured";
-                }else{
-                    return "Success";
-                }
+                return $this->ops->checkoutBook($isbn, $user, $admin, $pass);
             }else{
                 $isbn = $_POST['isbn'];
                 $admin = $_POST['admin'];
                 $pass = $_POST['pass'];
                 $user = $_POST['user'];
-                if ($this->ops->returnBook($isbn, $user, $admin, $pass)==0){
-                    return "An error occured";
-                }else{
-                    return "Success";
-                }
+                return $this->ops->returnBook($isbn, $user, $admin, $pass);
             }
-        }else if(isset($_POST['esubmit'])){
-            
+        }else if(isset($_POST['esubmit'])){ //edit book DONE
+            $admin = $_POST['admin'];
+            $pass = $_POST['pass'];
+            return $this->ops->updateBook($_POST, $admin, $pass);
+        }else if(isset($_POST['resubmit'])){ //renew book DONE
+            $admin = $_POST['admin'];
+            $pass = $_POST['pass'];
+            $user = $_POST['user'];
+            $isbn = $_POST['isbn'];
+            return $this->ops->renew($isbn, $user, $admin, $pass);
         }
     }
     
@@ -87,10 +77,6 @@ _END;
             $books = $this->ops->search($isbn, "", "", "");
             return $books[0];
         }
-    }
-    
-    public function browseData(){
-           return $this->ops>search("","","","");
     }
 }
 

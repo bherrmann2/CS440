@@ -21,7 +21,7 @@ class OperationsController {
         $_admin;
         $_user;
         $ldap = new LDAPSearcher();
-        $_admin = $ldap->login($admin, $pass);
+        $_admin = $this->login($admin, $pass);
         if ($_admin == -1){
             return 0;
         }
@@ -50,7 +50,7 @@ class OperationsController {
         $_admin;
         $_user;
         $ldap = new LDAPSearcher();
-        $_admin = $ldap->login($admin, $pass);
+        $_admin = $this->login($admin, $pass);
         if ($_admin == -1){
             return 0;
         }
@@ -78,7 +78,7 @@ class OperationsController {
         $_admin;
         $_user;
         $ldap = new LDAPSearcher();
-        $_admin = $ldap->login($admin, $pass);
+        $_admin = $this->login($admin, $pass);
         if ($_admin == -1){
             return 0;
         }
@@ -104,7 +104,6 @@ class OperationsController {
     
     public function sendReminder(){
         $user_actions = new UserActions();
-        $users;
         $users = $user_actions->getCheckoutOutUsers();
         foreach($users as $user){
             $to = $user->getUserName();
@@ -120,9 +119,7 @@ class OperationsController {
     }
     
     public function addBook($isbn, $admin, $pass){
-        $_admin;
-        $ldap = new LDAPSearcher();
-        $_admin = $ldap->login($admin, $pass);
+        $_admin = $this->login($admin, $pass);
         if ($_admin == -1){
             return 0;
         }
@@ -132,9 +129,7 @@ class OperationsController {
     }
     
     public function removeBook($isbn, $admin, $pass){
-        $_admin;
-        $ldap = new LDAPSearcher();
-        $_admin = $ldap->login($admin, $pass);
+        $_admin = $this->login($admin, $pass);
         if ($_admin == -1){
             return 0;
         }
@@ -146,9 +141,7 @@ class OperationsController {
     }
     
     public function updateBook($book_info, $admin, $pass){
-        $_admin;
-        $ldap = new LDAPSearcher();
-        $_admin = $ldap->login($admin, $pass);
+        $_admin = $this->login($admin, $pass);
         if ($_admin == -1){
             return 0;
         }

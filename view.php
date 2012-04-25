@@ -49,15 +49,26 @@ _END;
                     </form>
 _END;
                 }
+            }else if(isset($_POST['csubmit']) || isset($_POST['rsubmit'])){
+                require_once 'UserInterface.php';
+                $ui = new UserInterface();
+                if($ui->postData() == 0){
+                    echo "<h2 align=center>An error occurred</h2>";
+                }else{
+                    echo "<h2 align=center>Success</h2>";
+                }
             }else{ //display the book
+                //require_once 'UserInterface.php';
                 //$ui = new UserInterface();
                 echo "<h1 align=\"center\">View Book</h1>";
-                if (isset($_POST['esubmit'])){
-                    //$ui->postData();
-                    $_GET['isbn'] = $_POST['isbn'];
-                    echo "<p align=center>{$_GET['isbn']}  here</p>";
+                if (isset($_POST['esubmit'])){ //edit the book then display it
+                    if($ui->postData() == 0){
+                        echo "<h2 align=center>An error occurred</h2>";
+                        exit();
+                    }else{
+                        $_GET['isbn'] = $_POST['isbn'];
+                    }
                 }else{
-                    //require_once 'UserInterface.php';
                     //if (empty($_GET['isbn'])){
                         //echo "<p align=center>Nothing to display</p>";
                         //exit();

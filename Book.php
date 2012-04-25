@@ -1,87 +1,102 @@
 <?php
 
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this template, choose Tools | Templates
+* and open the template in the editor.
+*/
 
 /**
- * Description of Book
- *
- * @author Brad
- */
+* Description of Book
+*
+* @author Brad
+*/
 
 require_once 'Publisher.php';
 require_once 'Author.php';
 
 class Book {
-    //put your code here
+//put your code here
     protected $authors;
     protected $publishers;
     protected $name;
     protected $isbn;
+    protected $volume_id;
     protected $page_count;
     protected $description;
     protected $quantitiy;
-    
+    protected $available;
+
     public function __construct() {
-        $this->authors = new Author();
-        $this->publishers = new Publisher();
+    $this->authors = new Author();
+    $this->publishers = new Publisher();
     }
-    
+    public function getNumAvailable(){
+    return $this->available;
+    }
+    public function getVolumeID() {
+    return $this->volume_id;
+    }
     public function getAuthor(){
-        return $this->authors;
+    return $this->authors;
     }
-    
+
     public function getPublisher(){
-        return $this->publishers;
+    return $this->publishers;
     }
-    
+
     public function getName(){
-        return $this->name;
+    return $this->name;
     }
-    
+
     public function setName($newName){
-        $this->name = $newName;
-        return 1;
+    $this->name = $newName;
+    return 1;
     }
-    
+
     public function getISBN(){
-        return $this->isbn;
+    return $this->isbn;
     }
-    
+
     public function setISBN($newisbn){
-        $this->isbn = $newisbn;
-        return 1;
+    $this->isbn = $newisbn;
+    return 1;
     }
-    
+
     public function getPCount(){
-        return $this->page_count;
+    return $this->page_count;
     }
-    
+
     public function setPCount($pcount){
-        $this->page_count = $pccount;
-        return 1;
+    $this->page_count = $pccount;
+    return 1;
     }
-    
+
     public function getDescription(){
-        return $this->description;
+    return $this->description;
     }
-    
+
     public function setDescription($newDesc){
-        $this->description = $newDesc;
-        return 1;
+    $this->description = $newDesc;
+    return 1;
     }
-    
+
     public function getQuantity(){
-        return $this->quantitiy;
+    return $this->quantitiy;
     }
-    
+
     public function setQuantity($newQuant){
-        $this->quantitiy = $newQuant;
-        return 1;
+    $this->quantitiy = $newQuant;
+    return 1;
     }
-    
+
+    public function setVolumeID($pVolID){
+    $this->volume_id = $pVolID;
+    return 1;
+    }
+    public function setNumAvailable($pNA){
+    $this->available = $pNA;
+    return 1;
+    }
 }
 
 ?>
