@@ -1,3 +1,5 @@
 config.php
 GoogleBooksConf.php
 *.p12
+*.swp
+*.swo
