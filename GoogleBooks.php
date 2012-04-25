@@ -40,7 +40,7 @@ class GoogleBooks
 		#echo $shelf2->getVolumeCount();
 		#echo $mylib->addVolume(2, 'HFjLm2BauZ8C', array());
 		#if(!$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID, array()))
-		$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID, array());
+		$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID(), array());
 
 		//Update access token
 		if($client->getAccessToken())
@@ -86,7 +86,7 @@ class GoogleBooks
 		//	echo $shelf2->getVolumeCount();
 		#echo $mylib->addVolume(2, 'HFjLm2BauZ8C', array());
 		#if(!$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID, array()))
-		$mylib->removeVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID, array());
+		$mylib->removeVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID(), array());
 
 		//Update access token
 		if($client->getAccessToken())

@@ -33,4 +33,5 @@ and open the template in the editor.
         }
     ?>
     </body>
+    <br><p align="center"><a href="main.php">Return to Main Page</a>
 </html>

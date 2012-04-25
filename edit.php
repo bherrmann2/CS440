@@ -62,5 +62,6 @@ _END;
         echo "<p align=\"center\">Admin's name<input type=\"text\" name=\"admin\" style=width:8em;>Admin's password<input type=\"password\" name=\"pass\" style=width:8em;>";
         echo "<p align=center><input type=\"submit\" name=\"esubmit\" value=\"Submit\"></p></form>";
         ?>
+        <br><p align="center"><a href="main.php">Return to Main Page</a>
     </body>
 </html>

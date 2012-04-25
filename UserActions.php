@@ -100,6 +100,25 @@ class UserActions {
             return 0;
         }
     }
+    
+    public function getCheckedOut(){
+        $query = "SELECT username, name FROM checked_out INNER JOIN books ON book=book_key WHERE returned=0";
+        $result = mysql_query($query);
+        if (!$result){
+            return 0;
+        }
+        $user_book = array();
+        
+        while ($row = mysql_fetch_array($result)){
+            array_push($user_book, $row[0]);
+            array_push($user_book, $row[1]);
+        }
+        if (count($user_book)){
+            return $user_book;
+        }else{
+            return 0;
+        }
+    }
 }
 
 ?>

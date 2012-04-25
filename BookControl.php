@@ -40,8 +40,11 @@ class BookControl {
         $book = $sql_books->search($isbn);
         if (empty($book)){
             $google_books = new GoogleBooks();
-            $google_books->add($book);
             $book = $google_books->search($isbn);
+            if (empty($book)){
+                return 0;
+            }
+            $google_books->add($book);
         }
         $sql_books->addBook($book);
         return 1;
@@ -86,9 +89,9 @@ class BookControl {
         if (empty($book)){
             return 0;
         }else{
-            $sql_books->removeBook($book);
+            $sql_books->removeBook($isbn);
             $google_books = new GoogleBooks();
-            $google_books->remove($isbn);
+            $google_books->remove($book);
             return 1;
         }
         

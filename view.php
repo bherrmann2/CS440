@@ -140,6 +140,6 @@ _END;
 _END;
             }
         ?>
-        
+        <br><p align="center"><a href="main.php">Return to Main Page</a>
     </body>
 </html>
