@@ -27,36 +27,25 @@ function add_google_book($pBookObject)
 
 	//Load key in PKCS 12 format
 	$gb_key = file_get_contents(GB_API_KEY_FILE);
-	$client->setAssertionCredentials(new apiAssertionCredentials("1013677779152@developer.gserviceaccount.com", array('https://www.googleapis.com/auth/books'), $gb_key));
+	$client->setAssertionCredentials(new apiAssertionCredentials(GB_API_SERVICE_ACCOUNT_EMAIL, array('https://www.googleapis.com/auth/books'), $gb_key));
 	$client->setClientId(GB_API_CLIENT_ID);
 
 	$service = new apiBooksService($client);
 	$mylib = $service->mylibrary_bookshelves;
-/*	$bookshelves = $service->bookshelves;
-
-	$pubshelves = $bookshelves->listBookshelves(GB_API_USER_UID, array());
-	foreach ($pubshelves as $oneshelf)
-	{
-		echo $oneshelf;
-	}
- */
 	//Book code goes here
-	/*$shelves = $mylib->listMylibraryBookshelves(array());
-	foreach($shelves->getItems() as $item)
-	{
-		echo $item->getTitle();
-	}
-	 */
-	$shelf2 = $mylib->get(2, array());
-	echo $shelf2->getVolumeCount();
-	#	echo $mylib->addVolume(2, 'HFjLm2BauZ8C', array());
-#	$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID, NULL);
+	#$shelf2 = $mylib->get(GB_API_BOOKSHELF_UID, array());
+	#echo $shelf2->getVolumeCount();
+	#echo $mylib->addVolume(2, 'HFjLm2BauZ8C', array());
+	#if(!$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID, array()))
+	$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID, array());
 	
 	//Update access token
 	if($client->getAccessToken())
 	{
 		$_SESSION['gb_api_token'] = $client->getAccessToken();
 	}
+
+	return 1;
 }
 
 function search_google_books($pISBN)
@@ -74,6 +63,6 @@ function remove_google_book($pBookObject)
 	
 }
 
-add_google_book(NULL);
+//add_google_book(NULL);
 ?>
 Hello World
