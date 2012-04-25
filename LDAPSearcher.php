@@ -14,14 +14,21 @@ require_once 'User.php';
 
 class LDAPSearcher {
     //put your code here
+    protected $conn;
     public function getUser($username){
-        $user = new User();
-        $user->setUserName($username);
-        $user->setUserType(0);
+        //code here
     }
     
     public function isAdmin($username, $password){
-        return 1;
+        $this->conn = ldap_connect("ad.acm.cs");
+        if ($this->conn){
+            $bind = ldap_bind($conn, $username, $password);
+            if (!$bind){
+                return 0;
+            }else{
+                return 1;
+            }
+        }
     }
     
 }
