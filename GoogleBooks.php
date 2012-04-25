@@ -148,14 +148,6 @@ class GoogleBooks
 			$theBook->setPublisher($publishInfo);
 
 		}	
-		#$mylib = $service->mylibrary_bookshelves;
-		//Book code goes here
-		#$shelf2 = $mylib->get(GB_API_BOOKSHELF_UID, array());
-		#echo $shelf2->getVolumeCount();
-		#echo $mylib->addVolume(2, 'HFjLm2BauZ8C', array());
-		#if(!$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID, array()))
-		#$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID(), array());
-
 		//Update access token
 		if($client->getAccessToken())
 		{
@@ -210,6 +202,7 @@ class GoogleBooks
 //add_google_book(NULL);
 //remove_google_book(NULL);
 $gbObj = new GoogleBooks();
-echo $gbObj->search(9781593270650);
+//echo $gbObj->search(9781593270650);
 
-?>Hello World
+?>
+Hello World
