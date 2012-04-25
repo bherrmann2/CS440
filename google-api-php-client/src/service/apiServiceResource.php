@@ -18,7 +18,7 @@
 /**
  * Implements the actual methods/resources of the discovered Google API using magic function
  * calling overloading (__call()), which on call will see if the method name (plus.activities.list)
- * is available in this service, and if so construct an apiServiceRequest representing it.
+ * is available in this service, and if so construct an apiHttpRequest representing it.
  *
  * @author Chris Chabot <chabotc@google.com>
  * @author Chirag Shah <chirags@google.com>
@@ -28,6 +28,7 @@ class apiServiceResource {
   // Valid query parameters that work, but don't appear in discovery.
   private $stackParameters = array(
       'alt' => array('type' => 'string', 'location' => 'query'),
+      'boundary' => array('type' => 'string', 'location' => 'query'),
       'fields' => array('type' => 'string', 'location' => 'query'),
       'trace' => array('type' => 'string', 'location' => 'query'),
       'userIp' => array('type' => 'string', 'location' => 'query'),
@@ -36,6 +37,7 @@ class apiServiceResource {
       'data' => array('type' => 'string', 'location' => 'body'),
       'mimeType' => array('type' => 'string', 'location' => 'header'),
       'uploadType' => array('type' => 'string', 'location' => 'query'),
+      'mediaUpload' => array('type' => 'complex', 'location' => 'query'),
   );
 
   /** @var apiService $service */
@@ -60,28 +62,16 @@ class apiServiceResource {
   /**
    * @param $name
    * @param $arguments
-   * @return apiServiceRequest|array
+   * @return apiHttpRequest|array
    * @throws apiException
    */
   public function __call($name, $arguments) {
-    if (count($arguments) != 1 && count($arguments) != 2) {
-      throw new apiException("client method calls expect 1 or 2 parameter (\$client->plus->activities->list(array('userId' => 'me'))");
-    }
-    if (! is_array($arguments[0])) {
-      throw new apiException("client method parameter should be an array (\$client->plus->activities->list(array('userId' => 'me'))");
-    }
-    $batchKey = false;
-    if (isset($arguments[1])) {
-      if (! is_string($arguments[1])) {
-        throw new apiException("The batch key parameter should be a string (\$client->plus->activities->list( array('userId' => 'me'), 'batchKey'))");
-      }
-      $batchKey = $arguments[1];
-    }
     if (! isset($this->methods[$name])) {
       throw new apiException("Unknown function: {$this->serviceName}->{$this->resourceName}->{$name}()");
     }
     $method = $this->methods[$name];
     $parameters = $arguments[0];
+
     // postBody is a special case since it's not defined in the discovery document as parameter, but we abuse the param entry for storing it
     $postBody = null;
     if (isset($parameters['postBody'])) {
@@ -151,41 +141,41 @@ class apiServiceResource {
     // Process Media Request
     $contentType = false;
     if (isset($method['mediaUpload'])) {
-      $media = apiMediaFileUpload::process($postBody, $method, $parameters);
-      if (isset($media['content-type'])) {
-        $contentType = $media['content-type'];
-      }
-
-      if (isset($media['data'])) {
-        $postBody = $media['data'];
-      }
-
-      if (isset($media['file'])) {
-        $postBody = array('file' => $media['file']);
-      }
-
-      if (isset($media['restBasePath'])) {
-        $restBasePath = $media['restBasePath'];
+      $media = apiMediaFileUpload::process($postBody, $parameters);
+      if ($media) {
+        $contentType = isset($media['content-type']) ? $media['content-type']: null;
+        $postBody = isset($media['postBody']) ? $media['postBody'] : null;
+        $restBasePath = $method['mediaUpload']['protocols']['simple']['path'];
         $method['path'] = '';
       }
     }
 
-    $request = new apiServiceRequest(
-        $restBasePath,
-        $this->service->rpcPath,
-        $method['path'],
-        $method['id'],
-        $method['httpMethod'],
-        $parameters, $postBody
-    );
+    $url = apiREST::createRequestUri($restBasePath, $method['path'], $parameters);
 
-    $request->setContentType($contentType);
-    if ($batchKey) {
-      $request->setBatchKey($batchKey);
-      return $request;
-    } else {
-      return apiREST::execute($request);
+    $httpRequest = new apiHttpRequest($url, $method['httpMethod'], null, $postBody);
+    if ($postBody) {
+      $contentTypeHeader = array();
+      if (isset($contentType) && $contentType) {
+        $contentTypeHeader['content-type'] = $contentType;
+      } else {
+        $contentTypeHeader['content-type'] = 'application/json; charset=UTF-8';
+        $contentTypeHeader['content-length'] = apiUtils::getStrLen($postBody);
+      }
+      $httpRequest->setRequestHeaders($contentTypeHeader);
     }
+
+    $httpRequest = apiClient::$auth->sign($httpRequest);
+    if (apiClient::$useBatch) {
+      return $httpRequest;
+    }
+
+    // Terminate immediatly if this is a resumable request.
+    if (isset($parameters['uploadType']['value'])
+        && 'resumable' == $parameters['uploadType']['value']) {
+      return $httpRequest;
+    }
+
+    return apiREST::execute($httpRequest);
   }
 
   protected function useObjects() {
