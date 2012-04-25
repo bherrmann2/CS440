@@ -67,7 +67,7 @@ class Book {
     }
 
     public function setPCount($pcount){
-    $this->page_count = $pccount;
+    $this->page_count = $pcount;
     return 1;
     }
 

@@ -23,12 +23,14 @@ class Author {
     }
     
     public function removeAuthor($author){
-        $index = 0;
         $index = array_search($author, $this->authors);
-        if ($index == FALSE){
-            return 0;
+        if ($index == 0){
+            if ($this->authors[0] != $author){
+                return 0;
+            }
         }
         unset($this->authors[$index]);
+        $this->authors = array_merge($this->authors);
         return 1;
         
     }

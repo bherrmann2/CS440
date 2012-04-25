@@ -135,7 +135,7 @@ class MySQLBooks {
         $row = mysql_fetch_array($result);
         $book_key = $row[0];
         
-        $query = sprintf("UPDATE books SET name='%s', isbn=%d, volume_id='%s', page_count=%d, publish_date='%s', description='%s' WHERE book_key=%d",
+        $query = sprintf("UPDATE books SET name='%s', isbn=%d, volume_id='%s', page_count=%d, quantity=%d, publish_date='%s', description='%s' WHERE book_key=%d",
             mysql_real_escape_string($book->getName()),
             mysql_real_escape_string($book->getISBN()),
             mysql_real_escape_string($book->getVolumeID()),
@@ -156,7 +156,9 @@ class MySQLBooks {
             return 0;
         }
         
-        foreach($book->getAuthor()->getAuthor() as $author){
+        $authors = $book->getAuthor()->getAuthor();
+        
+        foreach($authors as $author){
             if ($this->authorLink($author, $book_key) == 0){
                 return 0;
             }
@@ -169,7 +171,8 @@ class MySQLBooks {
             return 0;
         }
         
-        foreach($book->getPublisher()->getPublisher() as $publisher){
+        $publishers = $book->getPublisher()->getPublisher();
+        foreach($publishers as $publisher){
             if ($this->publisherLink($publisher, $book_key) == 0){
                 return 0;
             }
@@ -180,7 +183,7 @@ class MySQLBooks {
     
     public function search($isbn){
         $query = sprintf("SELECT * FROM books WHERE isbn='%d'",
-            mysql_real_escape_string($book->getISBN()));
+            mysql_real_escape_string($isbn));
         $result = mysql_query($query);
         if (!$result){
             return 0;
@@ -201,7 +204,30 @@ class MySQLBooks {
         $book->setQuantity($row['quantity']);
         $book->getPublisher()->setPublishDate($row['publish_date']);
         
-        $query = sprintf("SELECT author FROM books_authors WHERE book=%d",
+        
+        $query = sprintf("SELECT book_key, quantity FROM books WHERE isbn=%d",
+            mysql_real_escape_string($book->getISBN()));
+        $result2 = mysql_query($query);
+        if (!$result2){
+            return 0;
+        }
+        $row2 = mysql_fetch_row($result2);
+        
+        $query = sprintf("SELECT COUNT(*) FROM checked_out WHERE book=%d AND returned=0 GROUP BY book",
+            mysql_real_escape_string($row2[0]));
+        $result3 = mysql_query($query);
+        if (!$result3){
+            return 0;
+        }
+        if (mysql_num_rows($result3) != 0){
+            $row3 = mysql_fetch_array($result3);
+            $avail = $row2[1] - $row3[0];
+        }else{
+            $avail = $row2[1];
+        }
+        $book->setNumAvailable($avail);
+        
+        $query = sprintf("SELECT name FROM authors INNER JOIN books_authors ON author_key=author WHERE book=%d",
             mysql_real_escape_string($row['book_key']));
         $result2 = mysql_query($query);
         if (!$result2){
@@ -212,7 +238,8 @@ class MySQLBooks {
             $book->getAuthor()->addAuthor($row2[0]);
         }
         
-        $query = sprintf("SELECT publisher FROM books_publishers WHERE book=%d",
+        
+        $query = sprintf("SELECT publishers.publisher FROM publishers INNER JOIN books_publishers ON publisher_key=books_publishers.publisher WHERE book=%d",
             mysql_real_escape_string($row['book_key']));
         $result2 = mysql_query($query);
         if (!$result2){
@@ -230,7 +257,7 @@ class MySQLBooks {
     }
     
     protected function authorLink($author, $book_key){ //links a book to authors
-        $query = sprintf("SELECT author_key FROM authors WHERE author='%s'",
+        $query = sprintf("SELECT author_key FROM authors WHERE name='%s'",
             mysql_real_escape_string($author));
         $result = mysql_query($query);
         if (!$result){
@@ -275,7 +302,7 @@ class MySQLBooks {
         }
 
         if (mysql_num_rows($result) == 0){
-            $query = sprintf("INSERT INTO publishers (publishers) VALUES('%s')",
+            $query = sprintf("INSERT INTO publishers (publisher) VALUES('%s')",
                 mysql_real_escape_string($publisher));
             $result = mysql_query($query);
             if (!$result){

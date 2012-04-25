@@ -23,17 +23,27 @@ class UserActions {
     }
     
     public function checkoutBook($book, $user, $admin){
-        $query = sprintf("SELECT book_key, quantity, COUNT(*) FROM checked_out INNER JOIN books ON book=book_key WHERE isbn=%d AND returned=0 GROUP BY book",
+        $query = sprintf("SELECT book_key, quantity FROM books WHERE isbn=%d",
             mysql_real_escape_string($book->getISBN()));
         $result = mysql_query($query);
         if (!$result){
             return 0;
         }
-        
         $row = mysql_fetch_row($result);
-        if ($row[1] == $row[2]){ //all checked out
+        
+        $query = sprintf("SELECT COUNT(*) FROM checked_out WHERE book=%d AND returned=0 GROUP BY book",
+            mysql_real_escape_string($row[0]));
+        $result2 = mysql_query($query);
+        if (!$result2){
             return 0;
         }
+        if (mysql_num_rows($result2) != 0){
+            $row2 = mysql_fetch_row($result2);
+            if ($row[1] == $row2[0]){ //all checked out
+                return 0;
+            }
+        }
+        
         $query = sprintf("INSERT INTO checked_out (username, book, c_admin) VALUES('%s', %d, '%s')",
             mysql_real_escape_string($user->getUserName()),
             mysql_real_escape_string($row[0]),
@@ -46,8 +56,9 @@ class UserActions {
     }
     
     public function returnBook($book, $user, $admin){
-        $query = sprintf("SELECT book_key FROM checked_out INNER JOIN books ON book_key=book WHERE isbn=%d and returned=0",
-            mysql_real_escape_string($book->getISBN()));
+        $query = sprintf("SELECT book_key FROM checked_out INNER JOIN books ON book_key=book WHERE isbn=%d and returned=0 AND username='%s'",
+            mysql_real_escape_string($book->getISBN()),
+            mysql_real_escape_string($user->getUserName()));
         $result = mysql_query($query);
         if (!$result){
             return 0;
@@ -58,9 +69,10 @@ class UserActions {
         }
         $row = mysql_fetch_array($result);
         
-        $query = sprintf("UPDATE checked_out SET returned=1, r_admin='%s' WHERE book=%d",
+        $query = sprintf("UPDATE checked_out SET returned=1, r_admin='%s' WHERE book=%d AND returned=0 AND username='%s'",
             mysql_real_escape_string($admin->getUserName()),
-            mysql_real_escape_string($row[0]));
+            mysql_real_escape_string($row[0]),
+            mysql_real_escape_string($user->getUserName()));
         $result = mysql_query($query);
         if (!$result){
             return 0;
