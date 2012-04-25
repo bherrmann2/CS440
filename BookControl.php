@@ -37,11 +37,10 @@ class BookControl {
     
     public function addBook($isbn){
         $sql_books = new MySQLBooks();
-        $book;
         $book = $sql_books->search($isbn);
         if (empty($book)){
             $google_books = new GoogleBooks();
-            $google_books->add($isbn);
+            $google_books->add($book);
             $book = $google_books->search($isbn);
         }
         $sql_books->addBook($book);
@@ -83,12 +82,11 @@ class BookControl {
     
     public function removeBook($isbn){
         $sql_books = new MySQLBooks();
-        $book;
         $book = $sql_books->search($isbn);
         if (empty($book)){
             return 0;
         }else{
-            $sql_books->removeBook($isbn);
+            $sql_books->removeBook($book);
             $google_books = new GoogleBooks();
             $google_books->remove($isbn);
             return 1;
