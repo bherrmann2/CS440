@@ -88,11 +88,14 @@ class BookControl {
         $book = $sql_books->search($isbn);
         if (empty($book)){
             return 0;
+        }else if ($book->getQuantity () > 1){
+            return $sql_books->removeBook($isbn);
         }else{
-            $sql_books->removeBook($isbn);
+            if ($sql_books->removeBook($isbn) == 0){
+                return 0;
+            }
             $google_books = new GoogleBooks();
-            $google_books->remove($book);
-            return 1;
+            return $google_books->remove($book);
         }
         
     }

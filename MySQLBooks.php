@@ -85,7 +85,8 @@ class MySQLBooks {
         if (mysql_num_rows($result) == 0){ //no book
             return 0;
         }
-        if (mysql_num_rows($result) > 1){ //more than 1
+        $row = mysql_fetch_assoc($result);
+        if ($row['quantity'] > 1){ //more than 1
             $query = sprintf("UPDATE books SET quantity=quantity-1 WHERE isbn='%d'",
                 mysql_real_escape_string($isbn));
             $result = mysql_query($query);
@@ -93,8 +94,7 @@ class MySQLBooks {
                 return 0;
             }
         }else{ //one book
-            $row = mysql_fetch_array($result);
-            $book_key = $row[0];
+            $book_key = $row['book_key'];
             
             $query = sprintf("DELETE FROM books_authors WHERE book=%d",
                 mysql_real_escape_string($book_key));
