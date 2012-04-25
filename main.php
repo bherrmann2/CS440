@@ -23,7 +23,7 @@ and open the template in the editor.
             </p>
         </div>
         <div id="mainContent">
-            <h2 align="center">About Text</h2>
+            <h2 align="center">Welcome to the ACM Library.<br><br>Basic actions are located on the left hand side.</h2>
         </div>
         <?php
         // put your code here
