@@ -39,9 +39,16 @@ class Book {
     public function getAuthor(){
     return $this->authors;
     }
-
+    public function setAuthor($pAuthorObject)
+    {
+	    $this->authors = $pAuthorObject;
+    }
     public function getPublisher(){
     return $this->publishers;
+    }
+    public function setPublisher($pPublisherObject)
+    {
+	    $this->publishers = $pPublisherObject;
     }
 
     public function getName(){
