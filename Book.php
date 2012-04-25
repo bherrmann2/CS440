@@ -23,7 +23,7 @@ class Book {
 	protected $volume_id;
 	protected $page_count;
 	protected $description;
-	protected $quantitiy;
+	protected $quantity;
 	protected $available;
 
 	public function __construct() {
@@ -92,7 +92,7 @@ class Book {
 	}
 
 	public function setQuantity($newQuant){
-		$this->quantitiy = $newQuant;
+		$this->quantity = $newQuant;
 		return 1;
 	}
 
@@ -108,7 +108,26 @@ class Book {
 
 	public function __toString()
 	{
-
+		$returnString = "";
+		$returnString .= sprintf("Title: %s\n", $this->name);
+		$returnString .= sprintf("ISBN: %s\n", $this->isbn);
+		$returnString .= sprintf("Volume ID: %s\n", $this->volume_id);
+		$returnString .= sprintf("Quantity: %s\n", $this->quantity);
+		$returnString .= sprintf("Page Count: %s\n", $this->page_count);
+		$returnString .= sprintf("Publish Date: %s\n", $this->publishers->getPublishDate());
+		$count = 1;
+		foreach($this->authors->getAuthor() as $author)
+		{
+			$returnString .= sprintf("Author %d: %s\n", $count, $author);
+			$count++;
+		}
+		$count = 1;
+		foreach($this->publishers->getPublisher() as $publisher)
+		{
+			$returnString .= sprintf("Publisher %d: %s\n", $count, $publisher);
+			$count ++;
+		}
+		return $returnString;
 	}
 }
 
