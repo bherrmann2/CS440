@@ -11,7 +11,7 @@
  * @author Brad
  */
 require_once 'Book.php';
-//require_once 'GoogleBooks.php';
+require_once 'GoogleBooks.php';
 require_once 'MySQLBooks.php';
 
 class BookControl {
@@ -37,12 +37,14 @@ class BookControl {
     
     public function addBook($isbn){
         $sql_books = new MySQLBooks();
-        $book;
         $book = $sql_books->search($isbn);
         if (empty($book)){
             $google_books = new GoogleBooks();
-            $google_books->add($isbn);
             $book = $google_books->search($isbn);
+            if (empty($book)){
+                return 0;
+            }
+            $google_books->add($book);
         }
         $sql_books->addBook($book);
         return 1;
@@ -83,14 +85,13 @@ class BookControl {
     
     public function removeBook($isbn){
         $sql_books = new MySQLBooks();
-        $book;
         $book = $sql_books->search($isbn);
         if (empty($book)){
             return 0;
         }else{
             $sql_books->removeBook($isbn);
             $google_books = new GoogleBooks();
-            $google_books->remove($isbn);
+            $google_books->remove($book);
             return 1;
         }
         

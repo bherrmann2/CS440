@@ -54,4 +54,5 @@ and open the template in the editor.
         // put your code here
         ?>
     </body>
+    <br><p align="center"><a href="main.php">Return to Main Page</a>
 </html>

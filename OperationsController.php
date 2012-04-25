@@ -125,6 +125,11 @@ class OperationsController {
         }
     }
     
+    public function getCheckedOut(){
+        $user_actions = new UserActions();
+        return $user_actions->getCheckedOut();
+    }
+    
     public function addBook($isbn, $admin, $pass){
         $_admin = $this->login($admin, $pass);
         if (empty($_admin)){
