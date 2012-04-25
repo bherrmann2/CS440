@@ -11,7 +11,7 @@
  * @author Brad
  */
 require_once 'Book.php';
-//require_once 'GoogleBooks.php';
+require_once 'GoogleBooks.php';
 require_once 'MySQLBooks.php';
 
 class BookControl {
