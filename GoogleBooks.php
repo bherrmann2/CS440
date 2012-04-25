@@ -16,7 +16,7 @@ require_once("./Book.php");
 class GoogleBooks
 {
 
-	public function add_google_book($pBookObject)
+	public function add($pBookObject)
 	{
 		$client = new apiClient();
 		$client->setApplicationName(GB_API_APP_NAME);
@@ -51,17 +51,17 @@ class GoogleBooks
 		return 1;
 	}
 
-	public function search_google_books($pISBN)
+	public function search($pISBN)
 	{
 
 	}
 
-	public function find_google_book($pISBN, $pAuthor = array(), $pTitle, $pKeywords = array())
+	public function find($pISBN, $pAuthor = array(), $pTitle, $pKeywords = array())
 	{
 
 	}
 
-	public function remove_google_book($pBookObject)
+	public function remove($pBookObject)
 	{
 
 		$client = new apiClient();
