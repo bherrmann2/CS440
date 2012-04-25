@@ -18,8 +18,6 @@ require_once 'User.php';
 class OperationsController {
     //put your code here
     public function renew($isbn, $user, $admin, $pass){
-        $_admin;
-        $_user;
         $ldap = new LDAPSearcher();
         $_admin = $this->login($admin, $pass);
         if (empty($_admin)){
@@ -46,38 +44,31 @@ class OperationsController {
     }
     
     public function checkoutBook($isbn, $user, $admin, $pass){
-        $_admin;
-        $_user;
         $ldap = new LDAPSearcher();
         $_admin = $this->login($admin, $pass);
         if (empty($_admin)){
             return 0;
         }
-        
-        print "here";
+       
         
         $_user = $ldap->getUser($user);
         if (empty($_user)){
             return 0;
         }
         
-        print "here";
         
         $book_control = new BookControl();
-        $book;
         $book = $book_control->searchLibrary($isbn, null, null, null);
         if (empty($book)){
             return 0;
         }
         
-        print "here";
         
         $user_actions = new UserActions();
         if ($user_actions->checkoutBook($book[0], $_user, $_admin) == 0){
             return 0;
         }
         
-        print "here";
         return 1;
     }
     
@@ -96,7 +87,6 @@ class OperationsController {
         }
         
         $book_control = new BookControl();
-        $book;
         $book = $book_control->searchLibrary($isbn, null, null, null);
         if (empty($book)){
             return 0;
@@ -136,7 +126,9 @@ class OperationsController {
             return 0;
         }
         $book_control = new BookControl();
-        $book_control->addBook($isbn);
+        if ($book_control->addBook($isbn) ==0){
+            return 0;
+        }
         return 1;
     }
     
