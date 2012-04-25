@@ -3,7 +3,7 @@
 require_once("./GoogleBooksConf.php");
 require_once("./google-api-php-client/src/apiClient.php");
 require_once("./google-api-php-client/src/contrib/apiBooksService.php");
-
+require_once("./Book.php");
 //Service Account Client ID
 //GB_API_CLIENT_ID
 //Service Account Name
@@ -31,9 +31,11 @@ function add_google_book($pBookObject)
 	$client->setAssertionCredentials(new apiAssertionCredentials(GB_API_SERVICE_ACCOUNT_EMAIL, array('https://www.googleapis.com/auth/books'), $gb_key));
 
 	$service = new apiBooksService($client);
-	
+	$mylib = $service->mylibrary_bookshelves;
 	//Book code goes here
-
+	$mylib->addVolume(GB_API_BOOKSHELF_UID, 'HFjLm2BauZ8C', array());
+#	$mylib->addVolume(GB_API_BOOKSHELF_UID, $pBookObject->getVolumeID, NULL);
+	
 	//Update access token
 	if($client->getAccessToken())
 	{
@@ -56,5 +58,6 @@ function remove_google_book($pBookObject)
 	
 }
 
+add_google_book(NULL);
 ?>
 Hello World
