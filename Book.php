@@ -88,7 +88,7 @@ class Book {
 	}
 
 	public function getQuantity(){
-		return $this->quantitiy;
+		return $this->quantity;
 	}
 
 	public function setQuantity($newQuant){
