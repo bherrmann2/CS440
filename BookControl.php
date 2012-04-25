@@ -11,7 +11,7 @@
  * @author Brad
  */
 require_once 'Book.php';
-require_once 'GoogleBooks.php';
+//require_once 'GoogleBooks.php';
 require_once 'MySQLBooks.php';
 
 class BookControl {
@@ -22,7 +22,7 @@ class BookControl {
             $google_books = new GoogleBooks();
             $isbn_array = $google_books->find($isbn, $author, $title, $keywords);
         }else{
-            $isbn_array = $isbn;
+            $isbn_array = array($isbn);
         }
         foreach ($isbn_array as $isbn){
             $sql_books = new MySQLBooks();
@@ -39,7 +39,7 @@ class BookControl {
         $sql_books = new MySQLBooks();
         $book;
         $book = $sql_books->search($isbn);
-        if ($book ==0){
+        if (empty($book)){
             $google_books = new GoogleBooks();
             $google_books->add($isbn);
             $book = $google_books->search($isbn);
@@ -49,12 +49,19 @@ class BookControl {
     }
     
     public function updateBook($book_info){
-        $book;
         $sql_books = new MySQLBooks();
         $book = $sql_books->search($book_info['isbn']);
-        if ($book==0){
+        if (empty($book)){
             return 0;
         }else{
+            $authors = $book->getAuthor()->getAuthor();
+            foreach($authors as $author){
+                $book->getAuthor()->removeAuthor($author);
+            }
+            $pubs = $book->getPublisher()->getPublisher();
+            foreach($pubs as $pub){
+                $book->getPublisher()->removePublisher($pub);
+            }
             //set all of the vals in book to the data in book_info
             $book->setName($book_info['name']);
             $book->setISBN($book_info['isbn']);
@@ -78,7 +85,7 @@ class BookControl {
         $sql_books = new MySQLBooks();
         $book;
         $book = $sql_books->search($isbn);
-        if ($book == 0){
+        if (empty($book)){
             return 0;
         }else{
             $sql_books->removeBook($isbn);

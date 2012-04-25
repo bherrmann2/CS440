@@ -22,10 +22,13 @@ class Publisher {
     public function removePublisher($publisher){
         $index = 0;
         $index = array_search($publisher, $this->publishers);
-        if ($index == FALSE){
-            return 0;
+        if ($index == 0){
+            if ($this->publishers[0] != $publisher){
+                return 0;
+            }
         }
         unset($this->publishers[$index]);
+        $this->publishers = array_merge($this->publishers);
         return 1;
     }
     

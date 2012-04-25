@@ -58,8 +58,8 @@ _END;
                     echo "<h2 align=center>Success</h2>";
                 }
             }else{ //display the book
-                //require_once 'UserInterface.php';
-                //$ui = new UserInterface();
+                require_once 'UserInterface.php';
+                $ui = new UserInterface();
                 echo "<h1 align=\"center\">View Book</h1>";
                 if (isset($_POST['esubmit'])){ //edit the book then display it
                     if($ui->postData() == 0){
@@ -74,15 +74,16 @@ _END;
                         //exit();
                     //}
                 }
-                //$book = $ui->getData();
-                $isbn = "444646744-33"; //$_GET['isbn'];
-                $name = "Test"; //$book->getName();
-                $authors = array("walter", "brad"); //$book->getAuthor()->getAuthor();
-                $publishers = array("pub"); //$book->getPublisher()->getPublisher();
-                $pdate = "2012-4-15"; //$book->getPublisher()->getPublishDate();
-                $pcount = 244; //$book->getPCount();
-                $description = "eg et hgf hdf hstyertsdthgaes rtrgesrhyert gtr fdg rt wt ergaerghtyrgarh wet"; //$book->getDescription();
-                $quantity = 2; //$book->getQuantity();
+                $book = $ui->getData();
+                $isbn = $_GET['isbn'];
+                $name = $book->getName();
+                $authors = $book->getAuthor()->getAuthor();
+                $publishers = $book->getPublisher()->getPublisher();
+                $pdate = $book->getPublisher()->getPublishDate();
+                $pcount = $book->getPCount();
+                $description = $book->getDescription();
+                $quantity = $book->getQuantity();
+                $avail = $book->getNumAvailable();
 
                 echo <<<_END
                     <table align=center cellspacing=0 cellpadding=0 border=1 style="border: solid windowtext 1.0pt">
@@ -91,7 +92,7 @@ _END;
                         </tr>
                             <td>$isbn</td>
                             <td>$quantity</td>
-                            <td></td>
+                            <td>$avail</td>
                         </tr>
                         <tr>
                             <td><b>Title</td><td><b>Pages</td><td></td>
@@ -124,7 +125,7 @@ _END;
                 echo "</table>";
 
                 echo <<<_END
-                        <form action="edit.php" method="POST">
+                        <form action="edit.php" method="GET">
                             <input type="hidden" name=isbn value=$isbn>
                             <p align=center><input type="submit" name="submit" value="Edit"></p>
                         </form>

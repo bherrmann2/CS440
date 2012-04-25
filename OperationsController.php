@@ -22,27 +22,26 @@ class OperationsController {
         $_user;
         $ldap = new LDAPSearcher();
         $_admin = $this->login($admin, $pass);
-        if ($_admin == -1){
+        if (empty($_admin)){
             return 0;
         }
         
         $_user = $ldap->getUser($user);
-        if ($_user == 0){
+        if (empty($_user)){
             return 0;
         }
         
         $book_control = new BookControl();
-        $book;
         $book = $book_control->searchLibrary($isbn, null, null, null);
-        if ($book_control == 0){
+        if (empty($book)){
             return 0;
         }
         
         $user_actions = new UserActions();
-        if ($user_actions->returnBook($book, $_user, $_admin) == 0){
+        if ($user_actions->returnBook($book[0], $_user, $_admin) == 0){
             return 0;
         }
-        $user_actions->checkoutBook($book, $_user, $_admin);
+        $user_actions->checkoutBook($book[0], $_user, $_admin);
         return 1;
     }
     
@@ -51,26 +50,34 @@ class OperationsController {
         $_user;
         $ldap = new LDAPSearcher();
         $_admin = $this->login($admin, $pass);
-        if ($_admin == -1){
+        if (empty($_admin)){
             return 0;
         }
         
+        print "here";
+        
         $_user = $ldap->getUser($user);
-        if ($_user == 0){
+        if (empty($_user)){
             return 0;
         }
+        
+        print "here";
         
         $book_control = new BookControl();
         $book;
         $book = $book_control->searchLibrary($isbn, null, null, null);
-        if ($book_control == 0){
+        if (empty($book)){
             return 0;
         }
         
+        print "here";
+        
         $user_actions = new UserActions();
-        if ($user_actions->checkoutBook($book, $_user, $_admin) == 0){
+        if ($user_actions->checkoutBook($book[0], $_user, $_admin) == 0){
             return 0;
         }
+        
+        print "here";
         return 1;
     }
     
@@ -79,24 +86,24 @@ class OperationsController {
         $_user;
         $ldap = new LDAPSearcher();
         $_admin = $this->login($admin, $pass);
-        if ($_admin == -1){
+        if (empty($_admin)){
             return 0;
         }
         
         $_user = $ldap->getUser($user);
-        if ($_user == 0){
+        if (empty($_user)){
             return 0;
         }
         
         $book_control = new BookControl();
         $book;
         $book = $book_control->searchLibrary($isbn, null, null, null);
-        if ($book_control == 0){
+        if (empty($book)){
             return 0;
         }
         
         $user_actions = new UserActions();
-        if ($user_actions->returnBook($book, $_user, $_admin) == 0){
+        if ($user_actions->returnBook($book[0], $_user, $_admin) == 0){
             return 0;
         }
         return 1;
@@ -120,7 +127,7 @@ class OperationsController {
     
     public function addBook($isbn, $admin, $pass){
         $_admin = $this->login($admin, $pass);
-        if ($_admin == -1){
+        if (empty($_admin)){
             return 0;
         }
         $book_control = new BookControl();
@@ -130,7 +137,7 @@ class OperationsController {
     
     public function removeBook($isbn, $admin, $pass){
         $_admin = $this->login($admin, $pass);
-        if ($_admin == -1){
+        if (empty($_admin)){
             return 0;
         }
         $book_control = new BookControl();
@@ -142,7 +149,7 @@ class OperationsController {
     
     public function updateBook($book_info, $admin, $pass){
         $_admin = $this->login($admin, $pass);
-        if ($_admin == -1){
+        if (empty($_admin)){
             return 0;
         }
         $book_control = new BookControl();
@@ -159,10 +166,11 @@ class OperationsController {
     
     public function login($username, $pass){
         $ldap = new LDAPSearcher();
-        if ($ldap->isAdmin($username, $pass) == 0){
+        if ($ldap->isAdmin($username, $pass)==0){
             return 0;
         }
         $user = new User();
+        $user->setUserName($username);
         $user->setUserType(1);
         return $user;
     }
