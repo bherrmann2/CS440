@@ -104,21 +104,26 @@ class GoogleBooks
 			$theBook->setPCount($volumeInfo->getPageCount());
 			$theBook->setDescription($volumeInfo->getDescription());
 			$theBook->setQuantity(1);
-			//get ISBN info?
+			//get ISBN info
+			//Get volumeIndustryInfo objec array
 			$volumeIndInfo = $volumeInfo->getIndustryIdentifiers();
 			$isbn10 = -1;
 			$isbn13 = -1;
+			//loop through array, get isbns
 			foreach($volumeIndInfo as $indInfo)
 			{
-				if($indInfo->getType == "ISBN_13")
+				
+				if($indInfo->getType() == "ISBN_13")
 				{
 					$isbn13 = $indInfo->getIdentifier();
 				}
-				if($indInfo->getType == "ISBN_10")
+				if($indInfo->getType() == "ISBN_10")
 				{
 					$isbn10 = $indInfo->getIdentifier();
 				}
 			}
+			
+			//use isbn13 by default, 10 as a fallback
 			if($isbn13 != -1)
 			{
 				$theBook->setISBN($isbn13);
@@ -127,7 +132,22 @@ class GoogleBooks
 			{
 				$theBook->setISBN($isbn10);
 			}
-		}
+			
+			//get book authors and add to book object
+			$authors = new Author();
+			foreach($volumeInfo->getAuthors() as $author)
+			{
+				$authors->addAuthor($author);
+			}
+			$theBook->setAuthor($authors);
+			
+			//get publisher info
+			$publishInfo = new Publisher();
+			$publishInfo->setPublishDate($volumeInfo->getPublishedDate());
+			$publishInfo->addPublisher($volumeInfo->getPublisher());
+			$theBook->setPublisher($publishInfo);
+
+		}	
 		#$mylib = $service->mylibrary_bookshelves;
 		//Book code goes here
 		#$shelf2 = $mylib->get(GB_API_BOOKSHELF_UID, array());
@@ -190,5 +210,6 @@ class GoogleBooks
 //add_google_book(NULL);
 //remove_google_book(NULL);
 $gbObj = new GoogleBooks();
-$gbObj->search(9781593270650);
+echo $gbObj->search(9781593270650);
+
 ?>Hello World
