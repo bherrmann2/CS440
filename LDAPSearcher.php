@@ -16,7 +16,8 @@ class LDAPSearcher {
     //put your code here
     protected $conn;
     public function getUser($username){
-        //code here
+        //check to see if username is in LDAP group.
+        //if so, create user object. if not, return 0
         $user = new User();
         $user->setUserName($username);
         $user->setUserType(0);
@@ -28,8 +29,8 @@ class LDAPSearcher {
         if ($this->conn){
             $bind = ldap_bind($this->conn, $username, $password);
             if (!$bind){
-                return 1;
-            }else{
+                return 1; //change to 0
+            }else{ //check to see if this person is in the admin group. if so, return 1, otherwise 0.
                 return 1;
             }
         }
