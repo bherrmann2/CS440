@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * CS 440 UIC Spring 2012
+ * Walter Dworak
+ * walter@wdworak.homelinux.com
+ *
+ * Use at your own risk
+*/
+
 require_once("./GoogleBooksConf.php");
 require_once("./google-api-php-client/src/apiClient.php");
 require_once("./google-api-php-client/src/contrib/apiBooksService.php");
