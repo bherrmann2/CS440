@@ -291,23 +291,15 @@ class GoogleBooks
 		}
 
 
+                $isbns = array();
+                
 		$theBooks = array();
 		$count = 0;
 		foreach($volumes as $volume)
 		{
-			$theBooks[$count] = new Book();
-			//get volume id
-			$theBooks[$count]->setVolumeID($volume->getId());
-			//get VolumeVolInfo object
+//			//get VolumeVolInfo object
 			$volumeInfo = $volume->getVolumeInfo();
-			//need author publisher, isbn
-			$theBooks[$count]->setName($volumeInfo->getTitle());
-			$theBooks[$count]->setNumAvailable(1);
-			$theBooks[$count]->setPCount($volumeInfo->getPageCount());
-			$theBooks[$count]->setDescription($volumeInfo->getDescription());
-			$theBooks[$count]->setQuantity(1);
-			//get ISBN info
-			//Get volumeIndustryInfo objec array
+//			//Get volumeIndustryInfo objec array
 			$volumeIndInfo = $volumeInfo->getIndustryIdentifiers();
 			$isbn10 = -1;
 			$isbn13 = -1;
@@ -328,28 +320,12 @@ class GoogleBooks
 			//use isbn13 by default, 10 as a fallback
 			if($isbn13 != -1)
 			{
-				$theBooks[$count]->setISBN($isbn13);
+                            array_push($isbns, $isbn13);
 			}
 			else
 			{
-				$theBooks[$count]->setISBN($isbn10);
+                            array_push($isbns, $isbn10);
 			}
-
-			//get book authors and add to book object
-			$authors = new Author();
-			foreach($volumeInfo->getAuthors() as $author)
-			{
-				$authors->addAuthor($author);
-			}
-			$theBooks[$count]->setAuthor($authors);
-
-			//get publisher info
-			$publishInfo = new Publisher();
-			$publishInfo->setPublishDate($volumeInfo->getPublishedDate());
-			$publishInfo->addPublisher($volumeInfo->getPublisher());
-			$theBooks[$count]->setPublisher($publishInfo);
-			
-			$count++;
 		}	
 			
 		//Update access token
@@ -358,7 +334,8 @@ class GoogleBooks
 			$_SESSION['gb_api_token'] = $client->getAccessToken();
 		}
 		
-		return $theBooks;
+                return $isbns;
+		//return $theBooks;
 	}
 
 	public function remove($pBookObject)
