@@ -18,15 +18,21 @@ class BookControl {
     public function searchLibrary($isbn, $author, $title, $keywords){
         $book_array = array();
         if (empty($isbn)){
-            $isbn_array;
             $google_books = new GoogleBooks();
+            if (empty($author) && empty($title) && empty($keywords)){
+                return 0;
+            }
             $isbn_array = $google_books->find($isbn, $author, $title, $keywords);
         }else{
             $isbn_array = array($isbn);
         }
         foreach ($isbn_array as $isbn){
             $sql_books = new MySQLBooks();
-            array_push($book_array, $sql_books->search($isbn));
+            $book = $sql_books->search($isbn);
+            if (empty($book)){
+                return 0;
+            }
+            array_push($book_array, $book);
         }
         if (empty($book_array)){
             return 0;
