@@ -23,10 +23,10 @@ and open the template in the editor.
         ?>
         <h1 align="center">Renew Book</h1>
         <form action="renew.php" method="POST">
-            <p align="center">ISBN<br><input type="text" name="isbn" style=width:8em;>
             <p align="center">User's name<br><input type="text" name="user" style=width:8em;>
             <p align="center">Admin's name<input type="text" name="admin" style=width:8em;>
             Admin's password<input type="password" name="pass" style=width:8em;>
+            <p align="center">ISBN<br><input type="text" name="isbn" style=width:8em;>
             <p align="center"><input type="submit" name="resubmit" value="Enter">
         </form>
     <?php

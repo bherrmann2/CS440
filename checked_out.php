@@ -17,10 +17,10 @@ and open the template in the editor.
         if (empty($user_book)){
             echo "<h2 align=center>No Checked Out Books</h2>";
         }else{
-            echo "<table align=center><tr><td>User</td><td>Book</td></tr>";
+            echo "<table align=center cellspacing=0 cellpadding=0 border=1 style=\"border: solid windowtext 1.0pt\"><tr><td align=center>User</td><td align=center>Book</td></tr>";
             for($i=0; $i<count($user_book); $i=$i+2){
-                echo "<tr><td>{$user_book[$i]}</td>";
-                echo "<td>{$user_book[$i+1]}</td></tr>";
+                echo "<tr><td align=center>{$user_book[$i]}</td>";
+                echo "<td align=center>{$user_book[$i+1]}</td></tr>";
             }
             echo "</table>";
         }
