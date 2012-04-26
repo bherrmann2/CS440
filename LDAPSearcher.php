@@ -20,6 +20,7 @@ class LDAPSearcher {
         //if so, create user object. if not, return 0
         $user = new User();
         $user->setUserName($username);
+        $user->setEmail($email);
         $user->setUserType(0);
         return $user;
     }
