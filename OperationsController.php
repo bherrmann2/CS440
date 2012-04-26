@@ -103,7 +103,7 @@ class OperationsController {
         $user_actions = new UserActions();
         $users = $user_actions->getCheckoutOutUsers();
         foreach($users as $user){
-            $to = $user->getUserName();
+            $to = $user->getEmail();
             $subject = "Book Reminder";
             $message = "This is an email to remind you that you have a book checked out.";
             $headers = 'From: bookreminder@acm.cs.uic.edu\r\nX-Mailer: php';

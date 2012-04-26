@@ -13,6 +13,7 @@
 class User {
     protected $username;
     protected $usertype;
+    protected $email;
     
     public function getUserName(){
         return $this->username;
@@ -30,6 +31,14 @@ class User {
     public function setUserType($type){
         $this->usertype = $type;
         return 1;
+    }
+    
+    public function setEmail($email){
+        $this->email = $email;
+    }
+    
+    public function getEmail(){
+        return $this->email;
     }
 }
 
