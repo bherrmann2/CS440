@@ -10,6 +10,7 @@
  *
  * @author Brad
  */
+
 class UserActions {
     
     protected $link;
@@ -81,21 +82,18 @@ class UserActions {
     }
     
     public function getCheckedOutUsers(){
-        $query = "SELECT username FROM checked_out WHERE returned=0";
+        $query = "SELECT username, name FROM checked_out INNER JOIN books ON book_key=book WHERE returned=0";
         $result = mysql_query($query);
         if (!$result){
             return 0;
         }
-        $users = array();
+        $users_books = array();
         
         while ($row = mysql_fetch_array($result)){
-            $user = new User();
-            $user->setUserName($row[0]);
-            $user->setUserType(0);
-            array_push($users, $user);
+            array_push($users_books, $row);
         }
-        if (count($users)){
-            return $users;
+        if (count($users_books)){
+            return $users_books;
         }else{
             return 0;
         }

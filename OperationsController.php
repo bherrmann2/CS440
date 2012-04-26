@@ -73,8 +73,6 @@ class OperationsController {
     }
     
     public function returnBook($isbn, $user, $admin, $pass){
-        $_admin;
-        $_user;
         $ldap = new LDAPSearcher();
         $_admin = $this->login($admin, $pass);
         if (empty($_admin)){
@@ -101,18 +99,22 @@ class OperationsController {
     
     public function sendReminder(){
         $user_actions = new UserActions();
-        $users = $user_actions->getCheckoutOutUsers();
-        foreach($users as $user){
+        $users_books = $user_actions->getCheckedOutUsers();
+        foreach($users_books as $user_book){
+            $ldap = new LDAPSearcher();
+            $user = $ldap->getUser($user_book[0]);
+            $book = $user_book[1];
             $to = $user->getEmail();
+            $sender = 'bookreminder@acm.cs.uic.edu';
             $subject = "Book Reminder";
-            $message = "This is an email to remind you that you have a book checked out.";
-            $headers = 'From: bookreminder@acm.cs.uic.edu\r\nX-Mailer: php';
-            if (mail($to, $subject, $message, $headers)){
-                return 1;
-            }else{
+            $message = "This is an email to remind you that you have \"$book\" checked out.";
+            $headers = "From: $sender\r\n" .
+                    "X-Mailer: php";
+            if (!(mail($to, $subject, $message, $headers))){
                 return 0;
             }
         }
+        return 1;
     }
     
     public function getCheckedOut(){
