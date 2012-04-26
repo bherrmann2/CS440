@@ -71,7 +71,7 @@ class GoogleBooks
 		$service = new apiBooksService($client);
 		//Get volume service object
 		$googleVols = $service->volumes;
-		
+
 		$optParams = array();
 		$optParams['printType'] = "books";
 		$q = "isbn:".$pISBN;
@@ -79,17 +79,18 @@ class GoogleBooks
 		//get volumes object
 		$results = $googleVols->listVolumes($q, $optParams);
 
-		if($results->getTotalItems() == 0)
+		//Get volume array
+		$volumes = $results->getItems();
+		
+		if(count($volumes) == 0)
 		{
 			return 0;
 		}
 
-		if($results->getTotalItems() > 1)
+		if(count($volumes) > 1)
 		{
 			return 0;
 		}
-		//Get volume array
-		$volumes = $results->getItems();
 
 		$theBook = new Book();
 		foreach($volumes as $volume)
@@ -112,7 +113,7 @@ class GoogleBooks
 			//loop through array, get isbns
 			foreach($volumeIndInfo as $indInfo)
 			{
-				
+
 				if($indInfo->getType() == "ISBN_13")
 				{
 					$isbn13 = $indInfo->getIdentifier();
@@ -122,7 +123,7 @@ class GoogleBooks
 					$isbn10 = $indInfo->getIdentifier();
 				}
 			}
-			
+
 			//use isbn13 by default, 10 as a fallback
 			if($isbn13 != -1)
 			{
@@ -132,7 +133,7 @@ class GoogleBooks
 			{
 				$theBook->setISBN($isbn10);
 			}
-			
+
 			//get book authors and add to book object
 			$authors = new Author();
 			foreach($volumeInfo->getAuthors() as $author)
@@ -140,7 +141,7 @@ class GoogleBooks
 				$authors->addAuthor($author);
 			}
 			$theBook->setAuthor($authors);
-			
+
 			//get publisher info
 			$publishInfo = new Publisher();
 			$publishInfo->setPublishDate($volumeInfo->getPublishedDate());
@@ -158,9 +159,198 @@ class GoogleBooks
 
 	}
 
-	public function find($pISBN, $pAuthor = array(), $pTitle, $pKeywords = array())
+	public function find($pISBN, $pAuthor, $pTitle, $pKeywords)
 	{
+		$client = new apiClient();
+		$client->setApplicationName(GB_API_APP_NAME);
 
+		session_start();
+		//Set cached access token
+		if (isset($_SESSION['gb_api_token']))
+		{
+			$client->setAccessToken($_SESSION['gb_api_token']);
+		}
+
+		//Load key in PKCS 12 format
+		$gb_key = file_get_contents(GB_API_KEY_FILE);
+		$client->setAssertionCredentials(new apiAssertionCredentials(GB_API_SERVICE_ACCOUNT_EMAIL, array('https://www.googleapis.com/auth/books'), $gb_key));
+		$client->setClientId(GB_API_CLIENT_ID);
+
+		$service = new apiBooksService($client);
+
+		//Get BookshelvesVolumesServiceResource
+		$bookshelf = $service->mylibrary_bookshelves_volumes;
+
+		$optParams = array();
+		$optParams['shelf'] = GB_API_BOOKSHELF_UID;
+		$count = 0;
+		$q = '';
+		$authorQ = '';
+		$titleQ = '';
+		$keywordQ = '';	
+		if($pAuthor != "")
+		{
+			foreach(preg_split("/ /", $pAuthor, -1, PREG_SPLIT_NO_EMPTY) as $author)	
+			{
+				if($count == 0)
+				{
+					$authorQ .= 'inauthor:'.$author.'';
+				}
+				else
+				{
+					$authorQ .= '+inauthor:'.$author.'';
+				}
+				$count ++;
+			}
+		}
+		$count = 0;
+		if($pTitle != "")
+		{
+			foreach(preg_split("/ /", $pTitle, -1, PREG_SPLIT_NO_EMPTY) as $title)
+			{
+				if($count == 0)
+				{
+					$titleQ .= 'intitle:'.$title.'';
+				}
+				else
+				{
+					$titleQ .= '+intitle:'.$title.'';
+				}
+				$count ++;
+			}	
+		}
+
+		$count = 0;
+		if($pKeywords != "")
+		{
+			foreach(preg_split("/ /", $pKeywords, -1, PREG_SPLIT_NO_EMPTY) as $keyword)
+			{
+				if($count == 0)
+				{
+					$keywordQ .= $keyword;
+				}
+				else
+				{
+					$keywordQ .= '+'.$keyword;
+				}
+				$count ++;
+			}
+		}
+		//printf("Author String> %s\n", $authorQ);
+		//printf("Title String> %s\n", $titleQ);
+		//printf("Keywork String> %s\n", $keywordQ);
+		
+		if($keywordQ != '')	
+		{
+			$q .= $keywordQ;
+		}
+		if($titleQ != '')
+		{
+			if($q == '')
+			{
+				$q .= $titleQ;
+			}
+			else
+			{
+				$q .= '+'.$titleQ;
+			}
+		}
+		if($authorQ != '')
+		{
+			if($q == '')
+			{
+				$q .= $authorQ;
+			}
+			else
+			{
+				$q .= '+'.$authorQ;
+			}
+		}
+		//printf("Q String> %s\n", $q);
+		
+		$optParams['q'] = $q;
+		//Get Volumes Ojbect
+		$returnedVolumes = $bookshelf->listMylibraryBookshelvesVolumes($optParams);
+		//Get Volume Object Array
+		$volumes = $returnedVolumes->getItems();
+		
+		//printf("Total Results: %d", count($volumes));
+		
+		//return 0 on a search with no results	
+		if(count($volumes) <= 0)
+		{
+			return 0;
+		}
+
+
+		$theBooks = array();
+		$count = 0;
+		foreach($volumes as $volume)
+		{
+			$theBooks[$count] = new Book();
+			//get volume id
+			$theBooks[$count]->setVolumeID($volume->getId());
+			//get VolumeVolInfo object
+			$volumeInfo = $volume->getVolumeInfo();
+			//need author publisher, isbn
+			$theBooks[$count]->setName($volumeInfo->getTitle());
+			$theBooks[$count]->setNumAvailable(1);
+			$theBooks[$count]->setPCount($volumeInfo->getPageCount());
+			$theBooks[$count]->setDescription($volumeInfo->getDescription());
+			$theBooks[$count]->setQuantity(1);
+			//get ISBN info
+			//Get volumeIndustryInfo objec array
+			$volumeIndInfo = $volumeInfo->getIndustryIdentifiers();
+			$isbn10 = -1;
+			$isbn13 = -1;
+			//loop through array, get isbns
+			foreach($volumeIndInfo as $indInfo)
+			{
+
+				if($indInfo->getType() == "ISBN_13")
+				{
+					$isbn13 = $indInfo->getIdentifier();
+				}
+				if($indInfo->getType() == "ISBN_10")
+				{
+					$isbn10 = $indInfo->getIdentifier();
+				}
+			}
+
+			//use isbn13 by default, 10 as a fallback
+			if($isbn13 != -1)
+			{
+				$theBooks[$count]->setISBN($isbn13);
+			}
+			else
+			{
+				$theBooks[$count]->setISBN($isbn10);
+			}
+
+			//get book authors and add to book object
+			$authors = new Author();
+			foreach($volumeInfo->getAuthors() as $author)
+			{
+				$authors->addAuthor($author);
+			}
+			$theBooks[$count]->setAuthor($authors);
+
+			//get publisher info
+			$publishInfo = new Publisher();
+			$publishInfo->setPublishDate($volumeInfo->getPublishedDate());
+			$publishInfo->addPublisher($volumeInfo->getPublisher());
+			$theBooks[$count]->setPublisher($publishInfo);
+			
+			$count++;
+		}	
+			
+		//Update access token
+		if($client->getAccessToken())
+		{
+			$_SESSION['gb_api_token'] = $client->getAccessToken();
+		}
+		
+		return $theBooks;
 	}
 
 	public function remove($pBookObject)
@@ -200,9 +390,20 @@ class GoogleBooks
 	}
 }
 //add_google_book(NULL);
-//remove_google_book(NULL);
-$gbObj = new GoogleBooks();
-//echo $gbObj->search(9781593270650);
-
+//$testBook = new Book();
+//$gbObj = new GoogleBooks();
+//$gbObj->remove($testBook);
+//echo $gbObj->search(0000000000000);
+//$books = $gbObj->find(0, "Michael", "Ruby", "computer");
+//if($books == 0)
+//{
+//	printf("No Books\n");
+//	exit;
+//}
+//foreach($books as $book)
+//{
+//	printf("\n");
+//	printf($book);
+//	printf("\n");
+//}
 ?>
-Hello World
