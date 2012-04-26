@@ -397,7 +397,6 @@ class GoogleBooks
 		return 1;
 	}
 }
-//add_google_book(NULL);
 //$testBook = new Book();
 //$gbObj = new GoogleBooks();
 //$gbObj->remove($testBook);
