@@ -11,6 +11,7 @@
  * @author Brad
  */
 require_once 'User.php';
+require_once 'LDAPSearcherConf.php';
 
 class LDAPSearcher {
 	//put your code here
@@ -20,45 +21,77 @@ class LDAPSearcher {
 		//check to see if username is in LDAP group.
 		if(!isset($this->conn))
 		{
-			$this->conn = ldap_connect("ldap://ad.acm.cs") or die("Counld not contact LDAP Server!");
+			$this->conn = ldap_connect(LDAPHost) or die("Counld not contact LDAP Server!");
 		}
-		ldap_bind($this->conn, "apacheacm@acm.cs", "eiT2hoexchiel7Panoh7Eepu") or die("Could not bind to LDAP Server");
+		ldap_bind($this->conn, LDAPServiceAccount, LDAPServiceAccountPassword) or die("Could not bind to LDAP Server");
 
-		$result = ldap_search($this->conn, "ou=ACMUsers,dc=acm,dc=cs", "(SAMAccountname={$username})", array("mail"));
-		
+		$result = ldap_search($this->conn, LDAPBaseDN, "(".LDAPUserAccountAttribute."=$username)", array(LDAPUserAccountAttribute, LDAPUserMailAttribute));
+
 		if($result == false)
 		{
 			ldap_unbind($this->conn);
 			return 0;
 		}
-		
-		$entries = ldap_get_entries($this->conn, $result);
 
-		//if so, create user object. if not, return 0
+		$entries = ldap_get_entries($this->conn, $result);
+		if($entries['count'] <= 0)
+		{
+			return 0;
+		}
+		//loop through results and manually check account  name attribute returned
+		//this is done because samaccountname in AD does not do a case sensity search and might mess up
 		$user = new User();
-		$user->setUserName($username);
-		$user->setEmail($entries[0]['mail']);
-		$user->setUserType(0);
-		ldap_unbind($this->conn);
-		return $user;
+		for($i = 0; $i < $entries['count']; $i++)
+		{
+			if($username == $entries[$i][LDAPUserAccountAttribute]['0'])
+			{
+				$user->setUserName($username);
+				$user->setEmail($entries['0'][LDAPUserMailAttribute]);
+				$user->setUserType(0);
+				ldap_unbind($this->conn);
+				return $user;
+			}
+		}
+		return 0;
 	}
 
 	public function isAdmin($username, $password){
 		if(!isset($this->conn))
 		{
-			$this->conn = ldap_connect("ldap://ad.acm.cs") or die("Could not contact LDAP server");
+			$this->conn = ldap_connect("ldap://172.29.0.254") or die("Could not contact LDAP server");
 		}
-		if ($this->conn){
-			$bind = ldap_bind($this->conn, $username, $password);
-			if (!$bind){
-				return 1; //change to 0
-			}else{ //check to see if this person is in the admin group. if so, return 1, otherwise 0.
+		if(ldap_bind($this->conn, $username."@acm.cs", $password))
+		{
+			$userDN = getDN($this->conn, $username, "ou=ACMUsers,dc=acm,dc=cs");
+			$result = ldap_read($this->conn, $userDN, "(memberof={ACMLib})", array('members'));
+			if($result == false)
+			{
+				return 0;
+			}
+			$entries = ldap_get_entries($this->conn, $result);
+			if($entries['count'] > 0)
+			{
 				return 1;
 			}
 		}
+		else
+		{
+			return 0;
+		}
+		return 0;
 	}
 
 }
 //$myLDAP = new LDAPSearcher();
-//var_dump($myUser);
+//$search = "walter";
+//$myUser = $myLDAP->getUser($search);
+//printf("Admin: %d", $myLDAP->isAdmin("walter", "W4l735_42786322")); 
+//if($myUser != false)
+//{
+//	var_dump($myUser);
+//}
+//else
+//{
+//	printf("User %s not found\n", $search);
+//}
 ?>
