@@ -1,0 +1,14 @@
+<?php
+/*
+ * Default Config File for LDAP Searcher Class
+ * Contains information about LDAP server and forest
+ */
+
+define("LDAPHost", "ldap://example.com");
+define("LDAPServiceAccount", "lib@example.com");
+define("LDAPServiceAccountPassword", "apassword");
+define("LDAPDomain", "example.com");
+define("LDAPBaseDN", "ou=Users,dc=example,dc=com");
+define("LDAPUserAccountAttribute", "samaccountname");
+define("LDAPUserMailAttribute", "mail");
+?>
