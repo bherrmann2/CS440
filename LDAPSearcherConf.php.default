@@ -11,4 +11,5 @@ define("LDAPDomain", "example.com");
 define("LDAPBaseDN", "ou=Users,dc=example,dc=com");
 define("LDAPUserAccountAttribute", "samaccountname");
 define("LDAPUserMailAttribute", "mail");
+define("LDAPUserAdminGroup", "CN=MyGroup,OU=Groups,DC=example,DC=com");
 ?>
