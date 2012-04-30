@@ -46,7 +46,7 @@ class LDAPSearcher {
 			if($username == $entries[$i][LDAPUserAccountAttribute]['0'])
 			{
 				$user->setUserName($username);
-				$user->setEmail($entries['0'][LDAPUserMailAttribute]);
+				$user->setEmail($entries[$i][LDAPUserMailAttribute]);
 				$user->setUserType(0);
 				ldap_unbind($this->conn);
 				return $user;
@@ -58,40 +58,55 @@ class LDAPSearcher {
 	public function isAdmin($username, $password){
 		if(!isset($this->conn))
 		{
-			$this->conn = ldap_connect("ldap://172.29.0.254") or die("Could not contact LDAP server");
+			$this->conn = ldap_connect(LDAPHost) or die("Could not contact LDAP server");
 		}
-		if(ldap_bind($this->conn, $username."@acm.cs", $password))
+		if(ldap_bind($this->conn, $username.'@'.LDAPDomain, $password))
 		{
-			$userDN = getDN($this->conn, $username, "ou=ACMUsers,dc=acm,dc=cs");
-			$result = ldap_read($this->conn, $userDN, "(memberof={ACMLib})", array('members'));
+
+			$result = ldap_search($this->conn, LDAPBaseDN, "(".LDAPUserAccountAttribute."=$username)", array(LDAPUserAccountAttribute, LDAPUserMailAttribute));
+
 			if($result == false)
+			{
+				ldap_unbind($this->conn);
+				return 0;
+			}
+
+			$entries = ldap_get_entries($this->conn, $result);
+			//var_dump($entries);
+			if($entries['count'] <= 0)
 			{
 				return 0;
 			}
-			$entries = ldap_get_entries($this->conn, $result);
-			if($entries['count'] > 0)
+			//loop through results and manually check account  name attribute returned
+			//this is done because samaccountname in AD does not do a case sensity search and might mess up
+			for($i = 0; $i < $entries['count']; $i++)
 			{
-				return 1;
+				if($username == $entries[$i][LDAPUserAccountAttribute]['0'])
+				{
+					$userDN = $entries[$i]['dn'];
+					$groupResult = ldap_read($this->conn, $userDN, "(memberof=".LDAPUserAdminGroup.")", array("members"));
+					
+					if($groupResult == false)
+					{
+						printf("Group results false\n");
+						return 0;
+					}
+					
+					$groupEntries = ldap_get_entries($this->conn, $groupResult);
+					if($groupEntries['count'] > 0)
+					{
+						return 1;
+					}
+				}
 			}
 		}
 		else
 		{
-			return 0;
+			//login failure
+			return -1;
 		}
 		return 0;
 	}
 
 }
-//$myLDAP = new LDAPSearcher();
-//$search = "walter";
-//$myUser = $myLDAP->getUser($search);
-//printf("Admin: %d", $myLDAP->isAdmin("walter", "W4l735_42786322")); 
-//if($myUser != false)
-//{
-//	var_dump($myUser);
-//}
-//else
-//{
-//	printf("User %s not found\n", $search);
-//}
 ?>
