@@ -1,6 +1,7 @@
 LDAPSearcherConf.php
 config.php
 GoogleBooksConf.php
+MySQLBooksConf.php
 *.p12
 *.swp
 *.swo
