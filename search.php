@@ -34,7 +34,7 @@ and open the template in the editor.
         ?>
             <form action="search.php" method="POST">
                 <p align="center">
-                    ISBN:<br><input type="text" name="isbn" style=width:8em;>
+                    ISBN:<br><input type="text" name="isbn" autofocus="autofocus" style=width:8em;>
                     <br><input type="submit" name="isubmit" value="Enter">
                 </p>
             </form>
