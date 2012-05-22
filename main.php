@@ -13,6 +13,9 @@ and open the template in the editor.
         <div id="top">
             <h2>Welcome</h2>
         </div>
+        <div id="mainContent">
+            <h2 align="center">Welcome to the ACM Library.<br><br>Basic actions are located on the left hand side.</h2>
+        </div>
         <div id="leftColumn">
             <p align="center">
                 <a href="search.php">Search</a>
@@ -21,9 +24,6 @@ and open the template in the editor.
                 <a href="checked_out.php">View Checked Out</a>
                 <a href="help.html">Help</a>
             </p>
-        </div>
-        <div id="mainContent">
-            <h2 align="center">Welcome to the ACM Library.<br><br>Basic actions are located on the left hand side.</h2>
         </div>
         <?php
         // put your code here
