@@ -26,10 +26,17 @@ class Book {
 	protected $quantity;
 	protected $available;
 
+	protected $thumbnailLink;
+
 	public function __construct() {
 		$this->authors = new Author();
 		$this->publishers = new Publisher();
 	}
+	public function getThumbnailLink()
+	{
+		return $this->thumbnailLink;
+	}
+
 	public function getNumAvailable(){
 		return $this->available;
 	}
@@ -58,6 +65,10 @@ class Book {
 	public function setName($newName){
 		$this->name = $newName;
 		return 1;
+	}
+	public function setThumbnailLink($pLink)
+	{
+		$this->thumbnailLink = $pLink;
 	}
 
 	public function getISBN(){
