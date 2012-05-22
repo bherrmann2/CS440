@@ -1,7 +1,7 @@
 Feature List:
 	*Ability to set autoredirecting from 'Success Pages'
 	*Batch Mode to add and delete volumes in rapid succession
-	*Ability to pull thumbnail images from google books search and show them on detail page
+	*(Active - Walter) Ability to pull thumbnail images from google books search and show them on detail page
 	*Global Login/Logout
 		*Hide Elements based on login status
 	*Ability to view all books (with limits as to how many are on a page)
