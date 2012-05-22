@@ -107,6 +107,11 @@ class GoogleBooks
 			$theBook->setVolumeID($volume->getId());
 			//get VolumeVolInfo object
 			$volumeInfo = $volume->getVolumeInfo();
+			
+			//get VolumeVolumeInfoImageLinks
+			$volumeImageInfo = $volumeInfo->getImageLinks();
+			$theBook->setThumbnailLink($volumeImageInfo->getThumbnail());
+
 			//need author publisher, isbn
 			$theBook->setName($volumeInfo->getTitle());
 			$theBook->setNumAvailable(1);
