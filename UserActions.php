@@ -10,17 +10,18 @@
  *
  * @author Brad
  */
+require_once 'MySQLBooksConf.php';
 
 class UserActions {
     
     protected $link;
     
     public function __construct() {
-        $this->link = mysql_connect('acm.cs.uic.edu', 'acmlib', 'AGDb4DrL8hYnatQ7');
+        $this->link = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW);
         if (!$this->link){
             die('Could not connect');
         }
-        mysql_select_db('library');
+        mysql_select_db(MYSQL_DB);
     }
     
     public function checkoutBook($book, $user, $admin){

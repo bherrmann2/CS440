@@ -11,6 +11,7 @@
 * @author Brad
 */
 require_once 'Book.php';
+require_once 'MySQLBooksConf.php';
 
 class MySQLBooks {
     protected $link;
