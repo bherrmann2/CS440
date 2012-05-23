@@ -60,7 +60,6 @@ _END;
             }else{ //display the book
                 require_once 'UserInterface.php';
                 $ui = new UserInterface();
-                echo "<h1 align=\"center\">View Book</h1>";
                 if (isset($_POST['esubmit'])){ //edit the book then display it
                     if($ui->postData() == 0){
                         echo "<h2 align=center>An error occurred</h2>";
@@ -83,9 +82,12 @@ _END;
                 $pcount = $book->getPCount();
                 $description = $book->getDescription();
                 $quantity = $book->getQuantity();
-                $avail = $book->getNumAvailable();
+		$avail = $book->getNumAvailable();
+		$thumbnail = $book->getThumbnailLink();
+		
+		echo "<h1 align=\"center\">View Book<img src=\"$thumbnail\" alt=\"\" align=\"middle\" /></h1>";
 
-                echo <<<_END
+		echo <<<_END
                     <table align=center cellspacing=0 cellpadding=0 border=1 style="border: solid windowtext 1.0pt">
                         <tr>
                             <td><b>ISBN</td><td><b>Quantity</td><td><b>Availabe</td>
