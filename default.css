@@ -28,7 +28,7 @@ html,body {
 	width			: 	70%;
 	font-size		:	123%;
 	position		:	relative;
-	float			:	left;
+	float			:	none;
  }
  
 #dashboard_right {
