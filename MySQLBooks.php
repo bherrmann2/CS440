@@ -40,13 +40,14 @@ class MySQLBooks {
                 return 0;
             }
         }else{
-            $query = sprintf("INSERT INTO books (name, isbn, volume_id, page_count, quantity, publish_date, description) VALUES('%s', %d, '%s', %d, 1, '%s', '%s')",
+            $query = sprintf("INSERT INTO books (name, isbn, volume_id, page_count, quantity, publish_date, description, thumbnail) VALUES('%s', %d, '%s', %d, 1, '%s', '%s', '%s')",
                 mysql_real_escape_string($book->getName()),
                 mysql_real_escape_string($book->getISBN()),
                 mysql_real_escape_string($book->getVolumeID()),
                 mysql_real_escape_string($book->getPCount()),
                 mysql_real_escape_string($book->getPublisher()->getPublishDate()),
-                mysql_real_escape_string($book->getDescription()));
+		mysql_real_escape_string($book->getDescription()),
+		mysql_real_escape_string($book->getThumbnailLink()));
             $result = mysql_query($query);
             if (!$result){
                 return 0;
@@ -136,14 +137,15 @@ class MySQLBooks {
         $row = mysql_fetch_array($result);
         $book_key = $row[0];
         
-        $query = sprintf("UPDATE books SET name='%s', isbn=%d, volume_id='%s', page_count=%d, quantity=%d, publish_date='%s', description='%s' WHERE book_key=%d",
+        $query = sprintf("UPDATE books SET name='%s', isbn=%d, volume_id='%s', page_count=%d, quantity=%d, publish_date='%s', description='%s', thumbnail='%s' WHERE book_key=%d",
             mysql_real_escape_string($book->getName()),
             mysql_real_escape_string($book->getISBN()),
             mysql_real_escape_string($book->getVolumeID()),
             mysql_real_escape_string($book->getPCount()),
             mysql_real_escape_string($book->getQuantity()),
             mysql_real_escape_string($book->getPublisher()->getPublishDate()),
-            mysql_real_escape_string($book->getDescription()),
+	    mysql_real_escape_string($book->getDescription()),
+	    mysql_real_escape_string($book->getThumbnailLink()),
             mysql_real_escape_string($book_key));
         $result = mysql_query($query);
         if (!$result){
@@ -204,7 +206,7 @@ class MySQLBooks {
         $book->setPCount($row['page_count']);
         $book->setQuantity($row['quantity']);
         $book->getPublisher()->setPublishDate($row['publish_date']);
-        
+        $book->setThumbnailLink($row['thumbnail']);
         
         $query = sprintf("SELECT book_key, quantity FROM books WHERE isbn=%d",
             mysql_real_escape_string($book->getISBN()));
