@@ -124,10 +124,16 @@ class OperationsController {
     
     public function addBook($isbn, $admin, $pass){
         $_admin = $this->login($admin, $pass);
-        if (empty($_admin) || $_admin == -1 || $admin == 0){
-            return 0;
-        }
-        $book_control = new BookControl();
+	if(!get_class($_admin))
+	{
+		if ($_admin == -1){
+            		return -1;
+        	}
+        	if ($_admin == 0){
+            		return 0;
+        	}
+	}
+	$book_control = new BookControl();
         if ($book_control->addBook($isbn) ==0){
             return 0;
         }
@@ -136,9 +142,15 @@ class OperationsController {
     
     public function removeBook($isbn, $admin, $pass){
         $_admin = $this->login($admin, $pass);
-        if (empty($_admin) || $_admin == -1 || $admin == 0){
-            return 0;
-        }
+	if(!get_class($_admin))
+	{
+		if ($_admin == -1){
+            		return -1;
+        	}
+        	if ($_admin == 0){
+            		return 0;
+        	}
+	}
         $book_control = new BookControl();
         if ($book_control->removeBook($isbn) == 0){
             return 0;
@@ -148,9 +160,15 @@ class OperationsController {
     
     public function updateBook($book_info, $admin, $pass){
         $_admin = $this->login($admin, $pass);
-        if (empty($_admin) || $_admin == -1 || $admin == 0){
-            return 0;
-        }
+	if(!get_class($_admin))
+	{
+		if ($_admin == -1){
+            		return -1;
+        	}
+        	if ($_admin == 0){
+            		return 0;
+        	}
+	}
         $book_control = new BookControl();
         if ($book_control->updateBook($book_info) == 0){
             return 0;
