@@ -124,7 +124,7 @@ class OperationsController {
     
     public function addBook($isbn, $admin, $pass){
         $_admin = $this->login($admin, $pass);
-        if (empty($_admin)){
+        if (empty($_admin) || $_admin == -1 || $admin == 0){
             return 0;
         }
         $book_control = new BookControl();
@@ -136,7 +136,7 @@ class OperationsController {
     
     public function removeBook($isbn, $admin, $pass){
         $_admin = $this->login($admin, $pass);
-        if (empty($_admin)){
+        if (empty($_admin) || $_admin == -1 || $admin == 0){
             return 0;
         }
         $book_control = new BookControl();
@@ -148,7 +148,7 @@ class OperationsController {
     
     public function updateBook($book_info, $admin, $pass){
         $_admin = $this->login($admin, $pass);
-        if (empty($_admin)){
+        if (empty($_admin) || $_admin == -1 || $admin == 0){
             return 0;
         }
         $book_control = new BookControl();
@@ -164,10 +164,16 @@ class OperationsController {
     }
     
     public function login($username, $pass){
-        $ldap = new LDAPSearcher();
-        if ($ldap->isAdmin($username, $pass)==0){
+	$ldap = new LDAPSearcher();
+	
+	$return = $ldap->isAdmin($username, $pass);
+        if ($return == 0){
             return 0;
-        }
+	}
+	if ($return == -1)
+	{
+		return -1;
+	}
         $user = new User();
         $user->setUserName($username);
         $user->setUserType(1);
