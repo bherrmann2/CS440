@@ -10,14 +10,23 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        if (isset($_POST['asubmit'])){
+	if (isset($_POST['asubmit'])){
             require_once 'UserInterface.php';
             $ui = new UserInterface();
-            if ($ui->postData() == 0){
+	    $return = $ui->postData();
+	    if ($return == 0)
+	    {
                 echo "<h2 align=center>An error occurred</h2>";
-            }else{
+	    }
+	    else if($return == -1)
+	    {
+		    echo "<h2 align=center>Login Failure</h2>";
+	    }
+	    else
+	    {
                 echo "<h2 align=center>Success</h2>";
             }
+	    unset($_POST['asubmit']);
         }else{
         ?>
         <div id="top">
