@@ -9,7 +9,7 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
-        <?php
+	<?php
 	if (isset($_POST['asubmit'])){
             require_once 'UserInterface.php';
             $ui = new UserInterface();
@@ -26,7 +26,7 @@ and open the template in the editor.
 	    {
                 echo "<h2 align=center>Success</h2>";
             }
-	    unset($_POST['asubmit']);
+	    //unset($_POST['asubmit']);
         }else{
         ?>
         <div id="top">
