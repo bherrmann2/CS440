@@ -29,8 +29,20 @@ and open the template in the editor.
                         $author = $authors[0];
                         echo "<p align=center><a href=\"view.php?isbn=$isbn\">\"$title\" by: $author</a></p>";
                     }
-                }
-            }else{
+		}
+		if(isset($_POST['ksubmit']))
+		{
+			unset($_POST['ksubmit']);
+		}
+		if(isset($_POST['isubmit']))
+		{
+			unset($_POST['isubmit']);
+		}
+
+		echo "<br><p align='center'><a href='search.php'>New Search</a>";
+	    }
+	    else
+	    {
         ?>
             <form action="search.php" method="POST">
                 <p align="center">
