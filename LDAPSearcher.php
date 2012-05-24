@@ -26,10 +26,10 @@ class LDAPSearcher {
 	public function getUser($username)
 	{
 		//check to see if username is in LDAP group.
-		if(!isset($this->conn))
-		{
-			$this->conn = ldap_connect(LDAPHost) or die("Counld not contact LDAP Server!");
-		}
+		//if(!isset($this->conn))
+		//{
+		$this->conn = ldap_connect(LDAPHost) or die("Counld not contact LDAP Server!");
+	//	}
 		ldap_bind($this->conn, LDAPServiceAccount, LDAPServiceAccountPassword) or die("Could not bind to LDAP Server");
 
 		$result = ldap_search($this->conn, LDAPBaseDN, "(".LDAPUserAccountAttribute."=$username)", array(LDAPUserAccountAttribute, LDAPUserMailAttribute));
@@ -72,10 +72,10 @@ class LDAPSearcher {
 	 * returns -1 on a login failure
 	 */
 	public function isAdmin($username, $password){
-		if(!isset($this->conn))
-		{
-			$this->conn = ldap_connect(LDAPHost) or die("Could not contact LDAP server");
-		}
+		//if(!isset($this->conn))
+		//{
+		$this->conn = ldap_connect(LDAPHost) or die("Could not contact LDAP server");
+		//}
 		if(ldap_bind($this->conn, $username.'@'.LDAPDomain, $password))
 		{
 
