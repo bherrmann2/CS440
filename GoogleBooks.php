@@ -381,21 +381,100 @@ class GoogleBooks
 
 		return 1;
 	}
+	public function listAll()
+	{
+		$client = new apiClient();
+		$client->setApplicationName(GB_API_APP_NAME);
+
+		session_start();
+		if(isset($_SESSION['gb_api_token']))
+		{
+			$client->setAccessToken($_SESSION['gb_api_token']);
+		}
+
+		$gb_key = file_get_contents(GB_API_KEY_FILE);
+		$client->setAssertionCredentials(new apiAssertionCredentials(GB_API_SERVICE_ACCOUNT_EMAIL, array('https://www.googleapis.com/auth/books'), $gb_key));
+		$client->setClientId(GB_API_CLIENT_ID);
+		$service = new apiBookService($client);
+
+		$bookshelf = $service->mylibrary_bookshelves_volumes;
+
+		$optParams = array();
+		$optParams['self'] = GB_API_BOOKSHELF_UID;
+		$returnedVolumes = $bookshelf->listMylibraryBookshelvesVolumes($optParams);
+
+		$volumes = $returnedVolumes->getItems();
+		$count = 0;
+		$books = array();
+		foreach($volumes as $volume)
+		{
+			$volumeInfo = $volume->getVolumeInfo();
+			$books["$count"] = new Book();
+			$books["$count"]->setName($volumeInfo->getTitle());
+			$books["$count"]->setVolumeID($volume->getId());
+			$books["$count"]->setPCount($volumeInfo->getPageCount());
+			$books["$count"]->setDesciption($volumeInfo->getDescription());
+			$volumeIndInfo - $volumeInfo->getIndustryIdentifiers();
+			$isbn10 = -1;
+			$isbn13 = -1;
+			foreach($volumeIndInfo as $indInfo)
+			{
+				if($indInfo->getType() == "ISBN_13")
+				{
+					$isbn13 = $indInfo->getIdentifier();
+				}
+				if($indInfo->getType() == "ISBN_10")
+				{
+					$isbn10 = $indInfo->getIdentifier();
+				}
+				if($isbn13 != -1)
+				{
+					$books["$count"]->setISBN($isbn13);
+				}
+				else
+				{
+					$books["$count"]->setISBN($isbn10);
+				}
+
+			}
+			$authors = new Author();
+			foreach($volumeInfo->getAuthors() as $author)
+			{
+				$authors->addAuthor($author);
+			}
+			$books["$count"]->setAuthor($authors);
+
+			$publishInfo = new Publisher();
+			$publishInfo->setPublishDate($volumeInfo->getPublishedDate());
+			$publishInfo->addPublisher($volumeInfo->getPublisher());
+			$books["$count"]->setPublisher($publishInfo);
+			
+			$count ++;
+		}	
+
+		if($client->getAccessToken())
+		{
+			$_SESSION['gb_api_token'] = $client->getAccessToken();
+		}
+		return $books;
+	}
 }
-//$testBook = new Book();
-//$gbObj = new GoogleBooks();
+/*
+$testBook = new Book();
+$gbObj = new GoogleBooks();
 //$gbObj->remove($testBook);
-//echo $gbObj->search(0000000000000);
-//$books = $gbObj->find(0, "Michael", "Ruby", "computer");
-//if($books == 0)
-//{
-//	printf("No Books\n");
-//	exit;
-//}
-//foreach($books as $book)
-//{
-//	printf("\n");
-//	printf($book);
-//	printf("\n");
-//}
+//echo $gbObj->search();
+$books = $gbObj->find(0, "", "", "computer");
+if($books == 0)
+{
+	printf("No Books\n");
+	exit;
+}
+foreach($books as $book)
+{
+	printf("\n");
+	printf($book);
+	printf("\n");
+}
+ */
 ?>
