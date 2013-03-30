@@ -29,10 +29,9 @@ class BookControl {
         foreach ($isbn_array as $isbn){
             $sql_books = new MySQLBooks();
             $book = $sql_books->search($isbn);
-            if (empty($book)){
-                return 0;
-            }
-            array_push($book_array, $book);
+            if (isset($book)){
+            	array_push($book_array, $book);
+	    }
         }
         if (empty($book_array)){
             return 0;
