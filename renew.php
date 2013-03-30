@@ -13,11 +13,12 @@ and open the template in the editor.
         require_once 'UserInterface.php';
         
         if (isset($_POST['resubmit'])){
-            $ui = new UserInterface();
-            if ($ui->postData() == 0){
+	    $ui = new UserInterface();
+	    $return = $ui->postData();
+            if ($return === 0){
                 echo "<h2 align=center>An error occurred</h2>";
             }else{
-                echo "<h2 align=center>Success</h2>";
+                echo "<h2 align=center>$return</h2>";
             }
         }else{
         ?>

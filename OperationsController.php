@@ -20,27 +20,27 @@ class OperationsController {
     public function renew($isbn, $user, $admin, $pass){
         $ldap = new LDAPSearcher();
         $_admin = $this->login($admin, $pass);
-        if (empty($_admin)){
-            return 0;
+        if ($_admin <= 0){
+            return "Bad Credentials";
         }
         
         $_user = $ldap->getUser($user);
         if (empty($_user)){
-            return 0;
+            return "No User Found";
         }
         
         $book_control = new BookControl();
         $book = $book_control->searchLibrary($isbn, null, null, null);
         if (empty($book)){
-            return 0;
+            return "No Book Found";
         }
         
         $user_actions = new UserActions();
         if ($user_actions->returnBook($book[0], $_user, $_admin) == 0){
-            return 0;
+            return "This book is not checked out";
         }
         $user_actions->checkoutBook($book[0], $_user, $_admin);
-        return 1;
+        return "Success";
     }
     
     public function checkoutBook($isbn, $user, $admin, $pass){

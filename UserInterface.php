@@ -68,7 +68,7 @@ class UserInterface {
             $user = $_POST['user'];
             $isbn = $_POST['isbn'];
             return $this->ops->renew($isbn, $user, $admin, $pass);
-        }
+	}
     }
     
     public function getData(){
